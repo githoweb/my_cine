@@ -102,9 +102,14 @@ class CoreController
         // /!\ != racine projet, ici on parle du répertoire public/
         $viewData['baseUri'] = $_SERVER['BASE_URI'];
 
+
+
         // On veut désormais accéder aux données de $viewData, mais sans accéder au tableau
         // La fonction extract permet de créer une variable pour chaque élément du tableau passé en argument
         extract($viewData);
+
+        dump($viewName);
+
         // => la variable $currentPage existe désormais, et sa valeur est $viewName
         // => la variable $assetsBaseUri existe désormais, et sa valeur est $_SERVER['BASE_URI'] . '/assets/'
         // => la variable $baseUri existe désormais, et sa valeur est $_SERVER['BASE_URI']

@@ -8,12 +8,12 @@
 // autoload.php permet de charger d'un coup toutes les dépendances installées avec composer
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
 
-use App\Controllers\CoreController;
 use App\Controllers\MainController;
 
 require_once '../vendor/autoload.php';
 
 // Mise en route des sessions au niveau de PHP
+// dump('toto')
 session_start();
 
 /* ------------
