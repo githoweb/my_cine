@@ -9,12 +9,34 @@
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
 
 use App\Controllers\MainController;
+use App\Controllers\MovieController;
+use App\Controllers\ActorController;
+use App\Controllers\DirectorController;
 
 require_once '../vendor/autoload.php';
 
 // Mise en route des sessions au niveau de PHP
-// dump('toto')
 session_start();
+
+
+
+/* ---- SCSS ---- */
+use ScssPhp\ScssPhp\Compiler;
+
+$compiler = new Compiler();
+
+$source = file_get_contents('./scss/styles.scss');
+
+try {
+  $output = $compiler->compile($source);
+  file_put_contents('assets/css/output.css', $output);
+  echo 'SCSS compiled successfully!';
+} catch (\Exception $e) {
+  echo 'Error compiling SCSS: ' . $e->getMessage();
+}
+
+
+
 
 /* ------------
 --- ROUTAGE ---
@@ -58,7 +80,35 @@ $router->map(
     'main-home'
 );
 
+$router->map(
+    'GET',
+    '/movie/list',
+    [
+        'method' => 'list',
+        'controller' => MovieController::class,
+    ],
+    'movies-list'
+);
 
+$router->map(
+    'GET',
+    '/actor/list',
+    [
+        'method' => 'list',
+        'controller' => ActorController::class,
+    ],
+    'actors-list'
+);
+
+$router->map(
+    'GET',
+    '/director/list',
+    [
+        'method' => 'list',
+        'controller' => DirectorController::class,
+    ],
+    'directors-list'
+);
 
 /* -------------
 --- DISPATCH ---

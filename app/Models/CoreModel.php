@@ -14,21 +14,21 @@ abstract class CoreModel
      *
      * @return bool
      */
-    abstract public function insert();
+    // abstract public function insert();
 
     /**
      * Mise a jour d'un enregistrement dans la database
      *
      * @return bool
      */
-    abstract public function update();
+    // abstract public function update();
 
     /**
      * Suppression d'un enregistrement dans la database
      *
      * @return bool
      */
-    abstract public function delete();
+    // abstract public function delete();
 
     /**
      * Fait la mise à jour ou l'insertion d'un enregistrement en database

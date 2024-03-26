@@ -15,68 +15,25 @@ class Movie extends CoreModel
     /**
      * @var string
      */
-    private $name;
+    private $title;
     /**
      * @var string
      */
-    private $description;
+    private $synopsis;
     /**
      * @var string
      */
-    private $picture;
+    private $poster;
     /**
-     * @var float
+     * @var string
      */
-    private $price;
+    private $duration;
     /**
-     * @var int
+     * @var string
      */
-    private $rate;
-    /**
-     * @var int
-     */
-    private $status;
-    /**
-     * @var int
-     */
-    private $brand_id;
-    /**
-     * @var int
-     */
-    private $category_id;
-    /**
-     * @var int
-     */
-    private $type_id;
+    private $date;
 
-    /**
-     * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
-     *
-     * @param int $productId ID du produit
-     * @return Product
-     */
-    public static function find($productId)
-    {
-        // récupérer un objet PDO = connexion à la BDD
-        $pdo = Database::getPDO();
 
-        // on écrit la requête SQL pour récupérer le produit
-        $sql = '
-            SELECT *
-            FROM product
-            WHERE id = ' . $productId;
-
-        // query ? exec ?
-        // On fait de la LECTURE = une récupration => query()
-        // si on avait fait une modification, suppression, ou un ajout => exec
-        $pdoStatement = $pdo->query($sql);
-
-        // fetchObject() pour récupérer un seul résultat
-        // si j'en avais eu plusieurs => fetchAll
-        $result = $pdoStatement->fetchObject('App\Models\Product');
-
-        return $result;
-    }
 
     /**
      * Méthode permettant de récupérer tous les enregistrements de la table product
@@ -86,315 +43,114 @@ class Movie extends CoreModel
     public static function findAll()
     {
         $pdo = Database::getPDO();
-        $sql = 'SELECT * FROM `product`';
-        $pdoStatement = $pdo->query($sql);
-        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
-
-        return $results;
-    }
-
-    /**
-     * Récupérer les produits mis en avant sur la home, tri par ID
-     * Parametre optionnel limit fixé a 3
-     *
-     * @param integer $limit
-     * @return void
-     */
-    public static function findAllHomepage($limit = 3)
-    {
-        $pdo = Database::getPDO();
-        $sql = "SELECT * FROM movie ORDER BY id ASC LIMIT $limit";
+        $sql = 'SELECT * FROM `movie`';
         $pdoStatement = $pdo->query($sql);
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 
         return $results;
     }
 
-     /**
-     * Cette fonction permet de créer une nouvelle catégorie en database
-     *
-     * @return void
-     */
-    public function insert()
-    {
-        $pdo = Database::getPDO();
-
-        $sql = "INSERT INTO product (name, description, picture, price, rate, status, brand_id, category_id, type_id)
-                VALUES (:name, :description, :picture, :price, :rate, :status, :brand_id, :category_id, :type_id)";
-                
-        $query = $pdo->prepare($sql);
-
-        $query->bindValue(':name'        ,$this->name, PDO::PARAM_STR);
-        $query->bindValue(':description' ,$this->description, PDO::PARAM_STR);
-        $query->bindValue(':picture'     ,$this->picture, PDO::PARAM_STR);
-        $query->bindValue(':price'       ,$this->price, PDO::PARAM_STR);
-        $query->bindValue(':rate'        ,$this->rate, PDO::PARAM_INT);
-        $query->bindValue(':status'      ,$this->status, PDO::PARAM_INT);
-        $query->bindValue(':brand_id'    ,$this->brand_id, PDO::PARAM_INT);
-        $query->bindValue(':category_id' ,$this->category_id, PDO::PARAM_INT);
-        $query->bindValue(':type_id'     ,$this->type_id, PDO::PARAM_INT);
-
-        $nbLignesModifiees = $query->execute();
-
-        // Je teste que exec a bien ajouté 1 ligne 
-        if ($nbLignesModifiees > 0) {
-            // Récupération de la valeur de l'id généré par la database
-            // et mise à jour du champ id de l'instance courante
-            $this->id = $pdo->lastInsertId();
-            return true;
-        } else {
-            // Erreur, la requête sql n'a pas fonctionné
-            return false;
-        }
-    }
-
-    public function update()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête UPDATE
-        $sql = "
-            UPDATE product
-            SET 
-                name = :name,
-                description = :description,
-                picture = :picture,
-                price = :price,
-                rate = :rate,
-                status = :status,
-                brand_id = :brand_id,
-                category_id = :category_id,
-                type_id = :type_id,
-                updated_at = NOW()
-                WHERE id = :id;
-        ";
-
-        $query = $pdo->prepare($sql);
-        // Execution de la requête de mise à jour (exec, pas query)
-
-        $query->bindValue(':name'        ,$this->name, PDO::PARAM_STR);
-        $query->bindValue(':description' ,$this->description, PDO::PARAM_STR);
-        $query->bindValue(':picture'     ,$this->picture, PDO::PARAM_STR);
-        $query->bindValue(':price'       ,$this->price, PDO::PARAM_STR);
-        $query->bindValue(':rate'        ,$this->rate, PDO::PARAM_INT);
-        $query->bindValue(':status'      ,$this->status, PDO::PARAM_INT);
-        $query->bindValue(':brand_id'    ,$this->brand_id, PDO::PARAM_INT);
-        $query->bindValue(':category_id' ,$this->category_id, PDO::PARAM_INT);
-        $query->bindValue(':type_id'     ,$this->type_id, PDO::PARAM_INT);
-        $query->bindValue(':id'          ,$this->id);
-
-        // execution de la requête SQL
-        $nbLignesModifiees = $query->execute();
-
-        // Je teste que exec a bien ajouté 1 ligne 
-        if ($nbLignesModifiees) {
-            // Récupération de la valeur de l'id généré par la database
-            // et mise à jour du champ id de l'instance courante
-            return true;
-        } else {
-            // Erreur, la requête sql n'a pas fonctionné
-            return false;
-        }
-    }
+    
 
     /**
-     * Delete enregistrement 
-     *
-     * @return bool
-     */
-    public function delete()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête UPDATE
-        $sql = "DELETE FROM product WHERE id = :id";
-
-        $query = $pdo->prepare($sql);
-        
-        $query->bindValue(':id', $this->id, PDO::PARAM_INT);
-
-        return $query->execute() > 0;
-    }
-
-    /**
-     * Get the value of name
+     * Get the value of title
      *
      * @return  string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * Set the value of name
+     * Set the value of title
      *
-     * @param  string  $name
+     * @param  string  $title
      */
-    public function setName(string $name)
+    public function setTitle(string $title)
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     /**
-     * Get the value of description
-     *
-     * @return  string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the value of description
-     *
-     * @param  string  $description
-     */
-    public function setDescription(string $description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get the value of picture
+     * Get the value of synopsis
      *
      * @return  string
      */
-    public function getPicture()
+    public function getSynopsis()
     {
-        return $this->picture;
+        return $this->synopsis;
     }
 
     /**
-     * Set the value of picture
+     * Set the value of synopsis
      *
-     * @param  string  $picture
+     * @param  string  $synopsis
      */
-    public function setPicture(string $picture)
+    public function setSynopsis(string $synopsis)
     {
-        $this->picture = $picture;
+        $this->synopsis = $synopsis;
     }
 
     /**
-     * Get the value of price
+     * Get the value of poster
      *
-     * @return  float
+     * @return  string
      */
-    public function getPrice()
+    public function getPoster()
     {
-        return $this->price;
+        // return "https://image.tmdb.org/t/p/original" . $this->poster;
+        return "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/" . $this->poster;        
     }
 
     /**
-     * Set the value of price
+     * Set the value of poster
      *
-     * @param  float  $price
+     * @param  string  $poster
      */
-    public function setPrice(float $price)
+    public function setPoster(string $poster)
     {
-        $this->price = $price;
+        $this->poster = $poster;
     }
 
     /**
-     * Get the value of rate
+     * Get the value of duration
      *
-     * @return  int
+     * @return  string
      */
-    public function getRate()
+    public function getDuration()
     {
-        return $this->rate;
+        return $this->duration;
     }
 
     /**
-     * Set the value of rate
+     * Set the value of duration
      *
-     * @param  int  $rate
+     * @param  string  $duration
      */
-    public function setRate(int $rate)
+    public function setDuration(string $duration)
     {
-        $this->rate = $rate;
+        $this->duration = $duration;
     }
 
     /**
-     * Get the value of status
+     * Get the value of date
      *
-     * @return  int
+     * @return  string
      */
-    public function getStatus()
+    public function getDate()
     {
-        return $this->status;
+        return $this->date;
     }
 
     /**
-     * Set the value of status
+     * Set the value of date
      *
-     * @param  int  $status
+     * @param  string  $date
      */
-    public function setStatus(int $status)
+    public function setDate(string $date)
     {
-        $this->status = $status;
+        $this->date = $date;
     }
 
-    /**
-     * Get the value of brand_id
-     *
-     * @return  int
-     */
-    public function getBrandId()
-    {
-        return $this->brand_id;
-    }
-
-    /**
-     * Set the value of brand_id
-     *
-     * @param  int  $brand_id
-     */
-    public function setBrandId(int $brand_id)
-    {
-        $this->brand_id = $brand_id;
-    }
-
-    /**
-     * Get the value of category_id
-     *
-     * @return  int
-     */
-    public function getCategoryId()
-    {
-        return $this->category_id;
-    }
-
-    /**
-     * Set the value of category_id
-     *
-     * @param  int  $category_id
-     */
-    public function setCategoryId(int $category_id)
-    {
-        $this->category_id = $category_id;
-    }
-
-    /**
-     * Get the value of type_id
-     *
-     * @return  int
-     */
-    public function getTypeId()
-    {
-        return $this->type_id;
-    }
-
-    /**
-     * Set the value of type_id
-     *
-     * @param  int  $type_id
-     */
-    public function setTypeId(int $type_id)
-    {
-        $this->type_id = $type_id;
-    }
 }

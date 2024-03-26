@@ -18,7 +18,7 @@ class MainController extends CoreController
     {
         // On va chercher les produits et les categories de la home page
         $movieObj = new Movie();
-        $movies = $movieObj->findAllHomepage();
+        $movies = $movieObj->findAll();
 
         // On appelle la méthode show() de l'objet courant
         // En argument, on fournit le fichier de Vue
