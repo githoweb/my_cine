@@ -103,9 +103,9 @@ class Movie extends CoreModel
     public static function findAllHomepage($limit = 3)
     {
         $pdo = Database::getPDO();
-        $sql = "SELECT * FROM product ORDER BY id ASC LIMIT $limit";
+        $sql = "SELECT * FROM movie ORDER BY id ASC LIMIT $limit";
         $pdoStatement = $pdo->query($sql);
-        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
+        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 
         return $results;
     }
