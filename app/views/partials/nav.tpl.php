@@ -1,7 +1,7 @@
 <nav>
   <ul>
     <li>
-      <a href="<?= $router->generate('movies-list') ?>" title="Films">Films</a>
+      <a href="<?= $router->generate('movies-list')/*, ['filters' =>[]]*/ ?>" title="Films">Films</a>
     </li>
 
     <li>

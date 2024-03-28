@@ -50,6 +50,20 @@ class Movie extends CoreModel
         return $results;
     }
 
+    public static function findAllFiltered($formData)
+    {
+        $genreId = $formData['genre_id'];
+
+        $pdo = Database::getPDO();
+        
+        $sql = "SELECT * FROM `movie` WHERE `genre_id`= $genreId";
+
+        $pdoStatement = $pdo->query($sql);
+        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
+
+        return $results;
+    }
+
     
 
     /**

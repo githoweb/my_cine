@@ -92,6 +92,16 @@ $router->map(
 );
 
 $router->map(
+    'POST',
+    '/movie/listFiltered',
+    [
+        'method' => 'listFiltered',
+        'controller' => MovieController::class,
+    ],
+    'movies-listFiltered'
+);
+
+$router->map(
     'GET',
     '/actor/list',
     [
