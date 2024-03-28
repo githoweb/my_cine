@@ -1,65 +1,92 @@
+
+
 body {
   font-size: 100%;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
 main {
   width: 75%;
   margin: auto;
   padding: 40px 0 0 0;
 }
+
 header {
   background: #000;
   color: #fff;
+
+  a {
+    color: #fff;
+  }
+
+  nav {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 20px;
+
+    ul {
+      display: flex;
+    }
+
+    li {
+      padding: 10px;
+    }
+  }
 }
-header a {
-  color: #fff;
-}
-header nav {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  padding: 20px;
-}
-header nav ul {
-  display: flex;
-}
-header nav li {
-  padding: 10px;
-}
+
+
 /* --- HTML --- */
+
 h1, h2, h3 {
   font-weight: bold;
   margin: 0 0 1rem 0;
 }
+
 h1 {
   font-size: 2rem;
 }
+
 h2 {
   font-size: 1.4rem;
   width: 100%;
 }
+
 h3 {
   font-size: 1.2rem;
 }
+
 /* --- FORMS --- */
+
+
+
+
 /* --- Modules --- */
+
+
 .card, .card-data {
   display: flex;
 }
+
 .card {
   margin: 40px 0;
   align-items: start;
 }
+
 .card-poster {
   width: 150px;
+
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
+  
 }
-.card-poster img {
-  width: 100%;
-  max-width: 100%;
-}
+
 .card-data {
   flex-wrap: wrap;
   align-items: start;
   width: calc(100% - 150px);
   padding: 0 20px;
+  
 }

@@ -12,6 +12,7 @@ use App\Controllers\MainController;
 use App\Controllers\MovieController;
 use App\Controllers\ActorController;
 use App\Controllers\DirectorController;
+use App\Controllers\UserController;
 
 require_once '../vendor/autoload.php';
 
@@ -25,14 +26,14 @@ use ScssPhp\ScssPhp\Compiler;
 
 $compiler = new Compiler();
 
-$source = file_get_contents('./scss/styles.scss');
+$source = file_get_contents('../app/scss/styles.scss');
 
 try {
   $output = $compiler->compile($source);
   file_put_contents('assets/css/output.css', $output);
-  echo 'SCSS compiled successfully!';
+//   echo 'SCSS compiled successfully!';
 } catch (\Exception $e) {
-  echo 'Error compiling SCSS: ' . $e->getMessage();
+//   echo 'Error compiling SCSS: ' . $e->getMessage();
 }
 
 
@@ -108,6 +109,63 @@ $router->map(
         'controller' => DirectorController::class,
     ],
     'directors-list'
+);
+
+
+$router->map(
+    'GET|POST',
+    '/login',
+    [
+        'method' => 'loginPost',
+        'controller' => UserController::class
+    ],
+    'login'
+);
+
+$router->map(
+    'GET',
+    '/logout',
+    [
+        'method' => 'logout',
+        'controller' => UserController::class 
+    ],
+    'logout'
+);
+
+// Liste des utilisateurs
+$router->map(
+    'GET',
+    '/user/list',
+    [
+        'method' => 'list',
+        'controller' => UserController::class,
+        'acl' => ["admin"] 
+    ],
+    'user-list'
+);
+
+// Ajout d'un utilisateur (route get)
+$router->map(
+    'GET',
+    '/user/add',
+    [
+        'method' => 'add',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'user-add'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/add',
+    [
+        'method' => 'addPost',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'user-add-post'
 );
 
 /* -------------

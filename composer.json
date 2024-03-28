@@ -7,5 +7,12 @@
     },
     "autoload": {
         "psr-4": {"App\\": "app/"}
+    },
+
+    "scripts" : {
+        "build": [
+            "vendor/bin/pscss --style=expanded scss/styles.scss public/assets/css/output.css",
+            "vendor/bin/pscss --style=compressed scss/main.scss public/assets/css/output.min.css"
+        ]
     }
 }

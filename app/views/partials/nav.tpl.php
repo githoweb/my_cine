@@ -11,5 +11,8 @@
     <li>
       <a href="<?= $router->generate('directors-list') ?>" title="Réalisateurs">Réalisateurs</a>
     </li>
+    <li>
+      <a href="<?= $router->generate('login') ?>" title="Administration">Administration</a>
+    </li>
   </ul>
 </nav>
