@@ -13,41 +13,11 @@ class MovieController extends CoreController
      * @return void
      */
     public function list()
-    {
-
-        
+    {        
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
         // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAll();
-
-        //$prod = new Product();
-        //$products = $prod->findAll();
-
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
-        $this->show('main/movies_list', [
-            'movies' => $movies
-        ]);
-    }
-
-    public function listFiltered()
-    {
-        $formData = $_POST;
-
-
-        // $genre = new Genre();
-
-        // $genre = $genre->getName();
-
-        
-        // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
-        // qui ne servait qu'a pouvoir accéder a la méthode find
-        $movies = Movie::findAllFiltered($formData);
-
         $genres = Genre::findAll();
-        dump($genres);
-
 
         //$prod = new Product();
         //$products = $prod->findAll();
@@ -58,6 +28,33 @@ class MovieController extends CoreController
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
+        ]);
+    }
+
+    public function listFiltered()
+    {
+        $formData = $_POST;
+        // $genre = new Genre();
+
+        // $genre = $genre->getName();
+        dump($_POST);
+
+        
+        // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
+        // qui ne servait qu'a pouvoir accéder a la méthode find
+        $movies = Movie::findAllFiltered($formData);
+
+        $genres = Genre::findAll();
+
+        //$prod = new Product();
+        //$products = $prod->findAll();
+
+        // On appelle la méthode show() de l'objet courant
+        // En argument, on fournit le fichier de Vue
+        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
+        $this->show('main/movies_list', [
+            'movies' => $movies,
+            'genres' => $genres
         ]);
     }
 

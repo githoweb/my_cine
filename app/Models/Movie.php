@@ -53,12 +53,58 @@ class Movie extends CoreModel
     public static function findAllFiltered($formData)
     {
         $genreId = $formData['genre_id'];
+        dump($genreId);
+        $year = $formData['year'];
 
         $pdo = Database::getPDO();
-        
-        $sql = "SELECT * FROM `movie` WHERE `genre_id`= $genreId";
 
-        $pdoStatement = $pdo->query($sql);
+        $conditions = [];
+        $parameters = [];
+
+        $sql = "SELECT * FROM `movie`";
+
+        if($genreId !== "default") {
+            dump($genreId);
+            $conditions[] = "`genre_id`= :genreId";
+            $parameters[':genreId'] = $genreId;
+            
+        }
+
+        if($year !== "default") {
+            dump($year);
+            $conditions[] = "`date`= :year";
+            $parameters[':year'] = $year;
+        }
+
+        dump($conditions);
+
+
+        if(!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        dump($sql);
+
+        
+        // $sql = "SELECT * FROM `movie` WHERE `genre_id`= :genreId AND `date`= :year OR :year='Choisissez une année'";
+
+        // if ($year !== null) {
+        //     $sql .= " AND `date` = :year";
+        // }
+
+        $pdoStatement = $pdo->prepare($sql);
+
+        // Bind parameters if they exist
+    
+        foreach ($parameters as $param => $value) {
+            $pdoStatement->bindValue($param, $value, PDO::PARAM_INT);
+        }
+
+        // $pdoStatement->bindParam(':genreId', $genreId, PDO::PARAM_INT);
+        // $pdoStatement->bindParam(':year', $year, PDO::PARAM_INT);
+
+        $pdoStatement->execute();
+
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 
         return $results;

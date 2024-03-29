@@ -3,7 +3,7 @@
 <form method="post" action="<?= $router->generate('movies-listFiltered') ?>">
 
   <select name="genre_id">
-    <option selected=selected>Choisissez un genre</option>
+    <option selected=selected value="default">Choisissez un genre</option>
     <?php $index = 1; ?>
     <?php foreach ($genres as $genre) : ?>
       <option value="<?= $index ?>"><?= $genre->getName(); ?></option>
@@ -11,8 +11,8 @@
     <?php endforeach; ?>
   </select>
 
-  <select name="movie_id">
-    <option selected=selected>Choisissez une année</option>
+  <select name="year">
+    <option selected=selected value="default">Choisissez une année</option>
     <?php for($i=1950; $i<2024; $i++) : ?>
       <option value="<?= $i ?>"><?= $i ?></option>
     <?php endfor; ?>
