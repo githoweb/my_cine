@@ -49,7 +49,6 @@ class Director extends CoreModel
 
         return $results;
     }
-
     
 
     /**

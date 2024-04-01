@@ -55,6 +55,7 @@ class Movie extends CoreModel
         $genreId = $formData['genre_id'];
         dump($genreId);
         $year = $formData['year'];
+        $directorId = $formData['director_id'];
 
         $pdo = Database::getPDO();
 
@@ -67,13 +68,18 @@ class Movie extends CoreModel
             dump($genreId);
             $conditions[] = "`genre_id`= :genreId";
             $parameters[':genreId'] = $genreId;
-            
         }
 
         if($year !== "default") {
             dump($year);
             $conditions[] = "`date`= :year";
             $parameters[':year'] = $year;
+        }
+
+        if($directorId !== "default") {
+            dump($genreId);
+            $conditions[] = "`director_id`= :directorId";
+            $parameters[':directorId'] = $directorId;
         }
 
         dump($conditions);

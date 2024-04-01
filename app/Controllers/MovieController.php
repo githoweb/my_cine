@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Movie;
 use App\Models\Genre;
+use App\Models\Director;
 
 class MovieController extends CoreController
 {
@@ -18,6 +19,7 @@ class MovieController extends CoreController
         // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAll();
         $genres = Genre::findAll();
+        $directors = Director::findAll();
 
         //$prod = new Product();
         //$products = $prod->findAll();
@@ -28,6 +30,7 @@ class MovieController extends CoreController
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
+            'directors' => $directors
         ]);
     }
 
@@ -45,6 +48,7 @@ class MovieController extends CoreController
         $movies = Movie::findAllFiltered($formData);
 
         $genres = Genre::findAll();
+        $directors = Director::findAll();
 
         //$prod = new Product();
         //$products = $prod->findAll();
@@ -54,7 +58,8 @@ class MovieController extends CoreController
         // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/movies_list', [
             'movies' => $movies,
-            'genres' => $genres
+            'genres' => $genres,
+            'directors' => $directors
         ]);
     }
 

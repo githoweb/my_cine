@@ -25,6 +25,17 @@
     <?php endforeach*/ ?>
   </select> -->
 
+  <select name="director_id">
+    <option selected=selected value="default">Choisissez un réalisateur</option>
+    <?php $index = 1; ?>
+    <?php foreach ($directors as $director) : ?>
+      <option value="<?= $index ?>"><?= $director->getFirstname(); ?> <?= $director->getLastname(); ?></option>
+      <?php $index++; ?>
+    <?php endforeach; ?>
+  </select>
+
+  
+
   <button type="submit">Valider</button>
 
 </form>
