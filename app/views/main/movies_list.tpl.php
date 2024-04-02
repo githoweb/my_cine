@@ -4,7 +4,7 @@
 <form method="post" action="<?= $router->generate('movies-listFiltered') ?>">
 
   <select name="genre_id">
-    <option selected=selected value="default">Choisissez un genre</option>
+    <option selected=selected value="">Choisissez un genre</option>
     <?php $index = 1; ?>
     <?php foreach ($genres as $genre) : ?>
       <option value="<?= $index ?>"><?= $genre->getName(); ?></option>
@@ -13,7 +13,7 @@
   </select>
 
   <select name="year">
-    <option selected=selected value="default">Choisissez une année</option>
+    <option selected=selected value="">Choisissez une année</option>
     <?php for($i=1950; $i<2024; $i++) : ?>
       <option value="<?= $i ?>"><?= $i ?></option>
     <?php endfor; ?>
@@ -27,7 +27,7 @@
   </select> -->
 
   <select name="director_id">
-    <option selected=selected value="default">Choisissez un réalisateur</option>
+    <option selected=selected value="">Choisissez un réalisateur</option>
     <?php $index = 1; ?>
     <?php foreach ($directors as $director) : ?>
       <option value="<?= $index ?>"><?= $director->getFirstname(); ?> <?= $director->getLastname(); ?></option>
@@ -36,7 +36,7 @@
   </select>
 
   <select name="actor_id">
-    <option selected=selected value="default">Choisissez un acteur / une actrice</option>
+    <option selected=selected value="">Choisissez un acteur / une actrice</option>
     <?php $index = 1; ?>
     <?php foreach ($actors as $actor) : ?>
       <option value="<?= $index ?>"><?= $actor->getFirstname(); ?> <?= $actor->getLastname(); ?></option>

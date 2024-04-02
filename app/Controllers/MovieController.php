@@ -38,17 +38,17 @@ class MovieController extends CoreController
 
     public function listFiltered()
     {
-        $formData = $_POST;
         dump($_POST);
-        $actorId = $formData['actor_id'];
-        // $genreId = $formData['genre_id'];
-        // $year = $formData['year'];
-        // $directorId = $formData['director_id'];
+        $formData = $_POST;
 
+        $genreId = $_POST['genre_id'];
+        $year = $_POST['year'];
+        $directorId = $_POST['director_id'];
+        $actorId = $_POST['actor_id'];
         
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
         // qui ne servait qu'a pouvoir accéder a la méthode find
-        $movies = Movie::findAllFiltered($formData);
+        $movies = Movie::findAllFiltered();
         $genres = Genre::findAll();
         $directors = Director::findAll();
         $actors = Actor::findAll();

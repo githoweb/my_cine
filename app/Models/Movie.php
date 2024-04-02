@@ -54,45 +54,38 @@ class Movie extends CoreModel
         return $results;
     }
 
-    public static function findAllFiltered($formData)
+    public static function findAllFiltered()
     {
-        $genreId = $formData['genre_id'];
-        $year = $formData['year'];
-        $directorId = $formData['director_id'];
-        $actorId = $formData['actor_id'];
-        dump($genreId);
-        dump($year);
-        dump($directorId);
-        dump($actorId);
+        $genreId = $_POST['genre_id'];
+        $year = $_POST['year'];
+        $directorId = $_POST['director_id'];
+        $actorId = $_POST['actor_id'];
 
         $pdo = Database::getPDO();
 
         $conditions = [];
         $parameters = [];
 
-        $sql = "SELECT * FROM `movie`";
+        $sql = "SELECT * FROM movie ";
 
-        if($genreId !== "default") {
-            $conditions[] = "`genre_id`= :genreId";
-            $parameters[':genreId'] = $genreId;
+        if(isset($_POST['genre_id']) && $_POST['genre_id'] !== "") {
+            $conditions[] = "genre_id= " . $_POST['genre_id'];
         }
 
-        if($year !== "default") {
-            $conditions[] = "`date`= :year";
-            $parameters[':year'] = $year;
+        if(isset($_POST['director_id']) && $_POST['director_id'] !== "") {
+            $conditions[] = "director_id= " . $_POST['director_id'];
         }
 
-        if($directorId !== "default") {
-            $conditions[] = "`director_id`= :directorId";
-            $parameters[':directorId'] = $directorId;
+        if(isset($_POST['year']) && $_POST['year'] !== "") {
+            $conditions[] = "date= " . $_POST['year'];
         }
 
         $actorCondition = "";
 
-        if($actorId !== "default") {
+
+        if(isset($_POST['actor_id']) && $_POST['actor_id'] !== "") {
             $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
-            $conditions[] = "`actor_id`= :actorId";
-            $parameters[':actorId'] = $actorId;
+            $conditions[] = "actor_id= " . $_POST['actor_id'];
         }
 
         if(!empty($conditions)) {
@@ -101,15 +94,7 @@ class Movie extends CoreModel
 
         dump($sql);
 
-        $pdoStatement = $pdo->prepare($sql);
-
-        // Bind parameters if they exist
-    
-        foreach ($parameters as $param => $value) {
-            $pdoStatement->bindValue($param, $value, PDO::PARAM_INT);
-        }
-
-        $pdoStatement->execute();
+        $pdoStatement = $pdo->query($sql);
 
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 
