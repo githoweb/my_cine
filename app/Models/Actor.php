@@ -33,7 +33,32 @@ class Actor extends CoreModel
      */
     private $biography;
 
+    /**
+     * Méthode permettant de récupérer un enregistrement de la table Actor en fonction d'un id donné
+     *
+     * @param int $actorId ID de l'acteur
+     * @return Product
+     */
+    public static function find($actorId)
+    {
+        // récupérer un objet PDO = connexion à la BDD
+        $pdo = Database::getPDO();
 
+        // on écrit la requête SQL pour récupérer le produit
+        // $sql = '
+        //     SELECT *
+        //     FROM actor
+        //     WHERE `actor_id`= $actorId ';
+
+
+        // $pdoStatement = $pdo->query($sql);
+
+        // $result = $pdoStatement->fetchObject('App\Models\Actor');
+
+        // dump($result);
+
+        // return $result;
+    }
 
     /**
      * Méthode permettant de récupérer tous les enregistrements de la table product

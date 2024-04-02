@@ -32,13 +32,17 @@ class Movie extends CoreModel
      * @var string
      */
     private $date;
+    /**
+     * @var string
+     */
+    protected $id;
 
 
 
     /**
      * Méthode permettant de récupérer tous les enregistrements de la table product
      *
-     * @return Product[]
+     * @return Movie[]
      */
     public static function findAll()
     {
@@ -53,9 +57,13 @@ class Movie extends CoreModel
     public static function findAllFiltered($formData)
     {
         $genreId = $formData['genre_id'];
-        dump($genreId);
         $year = $formData['year'];
         $directorId = $formData['director_id'];
+        $actorId = $formData['actor_id'];
+        dump($genreId);
+        dump($year);
+        dump($directorId);
+        dump($actorId);
 
         $pdo = Database::getPDO();
 
@@ -65,38 +73,33 @@ class Movie extends CoreModel
         $sql = "SELECT * FROM `movie`";
 
         if($genreId !== "default") {
-            dump($genreId);
             $conditions[] = "`genre_id`= :genreId";
             $parameters[':genreId'] = $genreId;
         }
 
         if($year !== "default") {
-            dump($year);
             $conditions[] = "`date`= :year";
             $parameters[':year'] = $year;
         }
 
         if($directorId !== "default") {
-            dump($genreId);
             $conditions[] = "`director_id`= :directorId";
             $parameters[':directorId'] = $directorId;
         }
 
-        dump($conditions);
+        $actorCondition = "";
 
+        if($actorId !== "default") {
+            $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
+            $conditions[] = "`actor_id`= :actorId";
+            $parameters[':actorId'] = $actorId;
+        }
 
         if(!empty($conditions)) {
-            $sql .= " WHERE " . implode(" AND ", $conditions);
+            $sql .= $actorCondition . " WHERE " . implode(" AND ", $conditions);
         }
 
         dump($sql);
-
-        
-        // $sql = "SELECT * FROM `movie` WHERE `genre_id`= :genreId AND `date`= :year OR :year='Choisissez une année'";
-
-        // if ($year !== null) {
-        //     $sql .= " AND `date` = :year";
-        // }
 
         $pdoStatement = $pdo->prepare($sql);
 
@@ -106,15 +109,42 @@ class Movie extends CoreModel
             $pdoStatement->bindValue($param, $value, PDO::PARAM_INT);
         }
 
-        // $pdoStatement->bindParam(':genreId', $genreId, PDO::PARAM_INT);
-        // $pdoStatement->bindParam(':year', $year, PDO::PARAM_INT);
-
         $pdoStatement->execute();
 
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 
         return $results;
     }
+
+    /**
+     * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
+     *
+     * @param int $productId ID du produit
+     * @return Movie
+     */
+    public static function find($movieId)
+    {
+        // récupérer un objet PDO = connexion à la BDD
+        $pdo = Database::getPDO();
+
+        // on écrit la requête SQL pour récupérer le produit
+        $sql = '
+            SELECT *
+            FROM movie
+            WHERE id = ' . $movieId;
+
+        // query ? exec ?
+        // On fait de la LECTURE = une récupration => query()
+        // si on avait fait une modification, suppression, ou un ajout => exec
+        $pdoStatement = $pdo->query($sql);
+
+        // fetchObject() pour récupérer un seul résultat
+        // si j'en avais eu plusieurs => fetchAll
+        $result = $pdoStatement->fetchObject('App\Models\Movie');
+
+        return $result;
+    }
+
 
     
 
@@ -218,5 +248,4 @@ class Movie extends CoreModel
     {
         $this->date = $date;
     }
-
 }

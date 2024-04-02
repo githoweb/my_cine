@@ -103,6 +103,16 @@ $router->map(
 
 $router->map(
     'GET',
+    '/movie/[i:id]',
+    [
+        'method' => 'findById',
+        'controller' => MovieController::class,
+    ],
+    'movie-detail'
+);
+
+$router->map(
+    'GET',
     '/actor/list',
     [
         'method' => 'list',

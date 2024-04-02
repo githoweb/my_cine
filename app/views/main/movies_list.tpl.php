@@ -1,4 +1,5 @@
 <h1>Liste de Films</h1>
+<?php dump($_GET) ?>
 
 <form method="post" action="<?= $router->generate('movies-listFiltered') ?>">
 
@@ -34,6 +35,15 @@
     <?php endforeach; ?>
   </select>
 
+  <select name="actor_id">
+    <option selected=selected value="default">Choisissez un acteur / une actrice</option>
+    <?php $index = 1; ?>
+    <?php foreach ($actors as $actor) : ?>
+      <option value="<?= $index ?>"><?= $actor->getFirstname(); ?> <?= $actor->getLastname(); ?></option>
+      <?php $index++; ?>
+    <?php endforeach; ?>
+  </select>
+
   
 
   <button type="submit">Valider</button>
@@ -41,11 +51,12 @@
 </form>
 
 <?php foreach ($movies as $movie) : ?>
+<?php  dump($movie) ?>
 
   <div class="card">
 
     <div class="card-poster">
-      <img src="<?= $movie->getPoster() ?>" alt="" />
+      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()] + $_GET); ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
     </div>
     <div class="card-data">
       <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>

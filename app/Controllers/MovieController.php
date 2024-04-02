@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Movie;
 use App\Models\Genre;
 use App\Models\Director;
+use App\Models\Actor;
 
 class MovieController extends CoreController
 {
@@ -20,7 +21,7 @@ class MovieController extends CoreController
         $movies = Movie::findAll();
         $genres = Genre::findAll();
         $directors = Director::findAll();
-
+        $actors = Actor::findAll();
         //$prod = new Product();
         //$products = $prod->findAll();
 
@@ -30,25 +31,28 @@ class MovieController extends CoreController
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
-            'directors' => $directors
+            'directors' => $directors,
+            'actors' => $actors
         ]);
     }
 
     public function listFiltered()
     {
         $formData = $_POST;
-        // $genre = new Genre();
-
-        // $genre = $genre->getName();
         dump($_POST);
+        $actorId = $formData['actor_id'];
+        // $genreId = $formData['genre_id'];
+        // $year = $formData['year'];
+        // $directorId = $formData['director_id'];
 
         
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
         // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAllFiltered($formData);
-
         $genres = Genre::findAll();
         $directors = Director::findAll();
+        $actors = Actor::findAll();
+        $actor = Actor::find($actorId);
 
         //$prod = new Product();
         //$products = $prod->findAll();
@@ -59,8 +63,29 @@ class MovieController extends CoreController
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
-            'directors' => $directors
+            'directors' => $directors,
+            'actors' => $actors,
+            'actor' => $actor
         ]);
+    }
+
+    public function findById($id)
+    {
+        dump($id);
+        // Récupérer les paramètres de filtre actuels de la requête GET
+        $queryParams = $_GET;
+        dump($_GET);
+
+        $movieModel = new Movie();
+        $movie = $movieModel->find($id);
+
+        dump($movie);
+
+        $dataToSend = [];
+        $dataToSend['movie'] = $movie;
+        $dataToSend['queryParams'] = $queryParams;
+
+        $this->show('main/movie_detail', $dataToSend);
     }
 
     /**
