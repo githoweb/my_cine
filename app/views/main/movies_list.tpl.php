@@ -1,7 +1,8 @@
 <h1>Liste de Films</h1>
+<?php echo('$_GET') ?>
 <?php dump($_GET) ?>
 
-<form method="post" action="<?= $router->generate('movies-listFiltered') ?>">
+<form method="get" action="<?= $router->generate('movies-listFiltered', $_GET) ?>">
 
   <select name="genre_id">
     <option selected=selected value="">Choisissez un genre</option>
@@ -18,13 +19,6 @@
       <option value="<?= $i ?>"><?= $i ?></option>
     <?php endfor; ?>
   </select>
-
-  <!-- <select name="movie_id">
-    <option selected=selected>Choisissez un réalisateur</option>
-      <?php /*foreach ($directors as $director) : ?>
-      <option value="<?= $director->getId() ?>"><?= $director->getTitle() ?></option>
-    <?php endforeach*/ ?>
-  </select> -->
 
   <select name="director_id">
     <option selected=selected value="">Choisissez un réalisateur</option>
@@ -51,12 +45,19 @@
 </form>
 
 <?php foreach ($movies as $movie) : ?>
-<?php  dump($movie) ?>
+
+  <?php  dump($movie);
+  $genreId = isset($_GET['genre_id']) ? $_GET['genre_id'] : '';
+  $year = isset($_GET['year']) ? $_GET['year'] : '';
+  $directorId = isset($_GET['director_id']) ? $_GET['director_id'] : '';
+  $actorId = isset($_GET['actor_id']) ? $_GET['actor_id'] : ''; 
+  echo($genreId);
+
+  ?>
 
   <div class="card">
-
     <div class="card-poster">
-      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()] + $_GET); ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
+      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()]) ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
     </div>
     <div class="card-data">
       <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>

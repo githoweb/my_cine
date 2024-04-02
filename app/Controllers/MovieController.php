@@ -15,7 +15,7 @@ class MovieController extends CoreController
      * @return void
      */
     public function list()
-    {        
+    {
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
         // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAll();
@@ -32,20 +32,44 @@ class MovieController extends CoreController
             'movies' => $movies,
             'genres' => $genres,
             'directors' => $directors,
-            'actors' => $actors
+            'actors' => $actors,
+
+            'genre_id' => '',
+            'year' => '',
+            'director_id' => '',
+            'actor_id' => '',
         ]);
     }
 
     public function listFiltered()
     {
-        dump($_POST);
-        $formData = $_POST;
+        $actorId = $_GET['actor_id'];
 
-        $genreId = $_POST['genre_id'];
-        $year = $_POST['year'];
-        $directorId = $_POST['director_id'];
-        $actorId = $_POST['actor_id'];
-        
+        if (isset($_POST['submit'])) {
+            // Traitement du formulaire de recherche
+            $genreId = $_GET['genre_id'];
+            $year = $_GET['year'];
+            $directorId = $_GET['director_id'];
+            $actorId = $_GET['actor_id'];
+
+
+
+            // Construction de l'URL avec les paramètres GET
+            $url = '/movie/list?genre_id=' . $genreId . '&year=' . $year . '&director_id=' . $directorId . '&actor_id=' . $actorId;
+
+            // Suppression de l'en-tête "Content-Type"
+            header_remove('Content-Type');
+            // Redirection vers la page de liste
+            header('Location: ' . $url);
+        }
+
+        $filterParams = [
+            'genre_id' => $_GET['genre_id'],
+            'year' => $_GET['year'],
+            'director_id' => $_GET['director_id'],
+            'actor_id' => $_GET['actor_id']
+        ];
+
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
         // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAllFiltered();
@@ -65,7 +89,8 @@ class MovieController extends CoreController
             'genres' => $genres,
             'directors' => $directors,
             'actors' => $actors,
-            'actor' => $actor
+            'actor' => $actor,
+            'filterParams' => $filterParams
         ]);
     }
 
@@ -81,9 +106,23 @@ class MovieController extends CoreController
 
         dump($movie);
 
-        $dataToSend = [];
-        $dataToSend['movie'] = $movie;
-        $dataToSend['queryParams'] = $queryParams;
+        $dataToSend = [
+            'movie' => $movie,
+            'filters' => [ // Keep filters array for potential use in the view
+                'genre_id' => isset($_GET['genre_id']) ? $_GET['genre_id'] : '',
+                'year' => isset($_GET['year']) ? $_GET['year'] : '',
+                'director_id' => isset($_GET['director_id']) ? $_GET['director_id'] : '',
+                'actor_id' => isset($_GET['actor_id']) ? $_GET['actor_id'] : '',
+            ],
+        ];
+
+        // If filters are present, append them to the "movies-listFiltered" route URL
+    if (!empty($dataToSend['filters'])) {
+        $queryString = http_build_query($dataToSend['filters']);
+        $this->show('main/movie_detail', $dataToSend, "movies-listFiltered?$queryString");
+    } else {
+        $this->show('main/movie_detail', $dataToSend);
+    }
 
         $this->show('main/movie_detail', $dataToSend);
     }
@@ -120,5 +159,4 @@ class MovieController extends CoreController
             header("Location: /movie_list");
         }
     }
-
 }

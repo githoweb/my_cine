@@ -56,10 +56,17 @@ class Movie extends CoreModel
 
     public static function findAllFiltered()
     {
-        $genreId = $_POST['genre_id'];
-        $year = $_POST['year'];
-        $directorId = $_POST['director_id'];
-        $actorId = $_POST['actor_id'];
+        $genreId = $_GET['genre_id'];
+        $year = $_GET['year'];
+        $directorId = $_GET['director_id'];
+        $actorId = $_GET['actor_id'];
+
+        $filterParams = [
+            'genre_id' => $_GET['genre_id'],
+            'year' => $_GET['year'],
+            'director_id' => $_GET['director_id'],
+            'actor_id' => $_GET['actor_id']
+        ];
 
         $pdo = Database::getPDO();
 
@@ -68,33 +75,50 @@ class Movie extends CoreModel
 
         $sql = "SELECT * FROM movie ";
 
-        if(isset($_POST['genre_id']) && $_POST['genre_id'] !== "") {
-            $conditions[] = "genre_id= " . $_POST['genre_id'];
+        $conditionAdded = false;
+
+        if(isset($_GET['genre_id']) && $_GET['genre_id'] !== "") {
+            $conditions[] = "genre_id = :genre_id";
+            $parameters[':genre_id'] = $_GET['genre_id'];
+            $conditionAdded = true;
         }
 
-        if(isset($_POST['director_id']) && $_POST['director_id'] !== "") {
-            $conditions[] = "director_id= " . $_POST['director_id'];
+        if(isset($_GET['director_id']) && $_GET['director_id'] !== "") {
+            $conditions[] = "director_id = :director_id";
+            $parameters[':director_id'] = $_GET['director_id'];
+            $conditionAdded = true;
         }
 
-        if(isset($_POST['year']) && $_POST['year'] !== "") {
-            $conditions[] = "date= " . $_POST['year'];
+        if(isset($_GET['year']) && $_GET['year'] !== "") {
+            $conditions[] = "date = :year";
+            $parameters[':year'] = $_GET['year'];
+            $conditionAdded = true;
         }
 
         $actorCondition = "";
 
 
-        if(isset($_POST['actor_id']) && $_POST['actor_id'] !== "") {
+        if(isset($_GET['actor_id']) && $_GET['actor_id'] !== "") {
             $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
-            $conditions[] = "actor_id= " . $_POST['actor_id'];
+            $conditions[] = "actor_id = :actor_id";
+            $parameters[':actor_id'] = $_GET['actor_id'];
+            $conditionAdded = true;
         }
 
-        if(!empty($conditions)) {
+        if($conditionAdded === true) {
             $sql .= $actorCondition . " WHERE " . implode(" AND ", $conditions);
         }
 
         dump($sql);
 
-        $pdoStatement = $pdo->query($sql);
+        // $pdoStatement = $pdo->query($sql);
+        $pdoStatement = $pdo->prepare($sql);
+
+        foreach ($parameters as $param => $value) {
+            $pdoStatement->bindValue($param, $value, PDO::PARAM_INT);
+        }
+        
+        $pdoStatement->execute($parameters);
 
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Movie');
 

@@ -92,7 +92,7 @@ $router->map(
 );
 
 $router->map(
-    'POST',
+    'GET',
     '/movie/listFiltered',
     [
         'method' => 'listFiltered',
