@@ -1,11 +1,16 @@
 <h1><?= $movie->getTitle() ?></h1>
 
-<?php dump($_GET) ?>
+<?php
 
-<a href="<?= $router->generate('movies-listFiltered', $_GET); ?>" title="">Retour à la liste des films</a>
+$baseUrl = $router->generate('movies-list');
+$url = $baseUrl . '?' . $queryString;
+?>
+
+
+<a href="<?= $url ?>" title="">Retour à la liste des films</a>
 
 <br>
-<a href = "javascript:history.back()">Back to previous page</a>
+<a href="javascript:history.back()">Back to previous page</a>
 
 <div class="card">
 
