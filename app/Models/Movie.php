@@ -45,12 +45,10 @@ class Movie extends CoreModel
         return $results;
     }
 
-    public static function findAllFiltered()
+    public static function findAllFiltered($year = "all", $genre_id = "all", $director_id = "all",$actor_id = "all")
     {
-        $genreId = $_POST['genre_id'];
-        $year = $_POST['year'];
-        $directorId = $_POST['director_id'];
-        $actorId = $_POST['actor_id'];
+
+        dump($actor_id);
 
         $pdo = Database::getPDO();
 
@@ -59,25 +57,30 @@ class Movie extends CoreModel
 
         $sql = "SELECT * FROM movie ";
 
-        if(isset($_POST['genre_id']) && $_POST['genre_id'] !== "") {
-            $conditions[] = "genre_id= " . $_POST['genre_id'];
+        if ($genre_id != "all") {
+            $conditions[] = "genre_id = " . $genre_id;
         }
 
-        if(isset($_POST['director_id']) && $_POST['director_id'] !== "") {
-            $conditions[] = "director_id= " . $_POST['director_id'];
+        if($director_id !== "all") {
+            $conditions[] = "director_id = " . $director_id;
         }
 
-        if(isset($_POST['year']) && $_POST['year'] !== "") {
-            $conditions[] = "date= " . $_POST['year'];
+        if($year !== "all") {
+            $conditions[] = "date = " . $year;
         }
 
         $actorCondition = "";
 
 
-        if(isset($_POST['actor_id']) && $_POST['actor_id'] !== "") {
+        if($actor_id !== "all") {
             $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
-            $conditions[] = "actor_id= " . $_POST['actor_id'];
+            $conditions[] = "actor_id = " . $actor_id;
         }
+
+        dump($genre_id);
+        dump($director_id);
+        dump($year);
+        dump($actor_id);
 
         if(!empty($conditions)) {
             $sql .= $actorCondition . " WHERE " . implode(" AND ", $conditions);
@@ -91,6 +94,7 @@ class Movie extends CoreModel
 
         return $results;
     }
+
 
     public static function find($movieId)
     {

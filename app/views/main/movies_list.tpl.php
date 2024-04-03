@@ -1,10 +1,9 @@
 <h1>Liste de Films</h1>
-<?php dump($_GET) ?>
 
-<form method="post" action="<?= $router->generate('movies-listFiltered') ?>">
+<form method="get" action="<?= $router->generate('movies-list') ?>">
 
   <select name="genre_id">
-    <option selected=selected value="">Choisissez un genre</option>
+    <option selected=selected value="all">Choisissez un genre</option>
     <?php $index = 1; ?>
     <?php foreach ($genres as $genre) : ?>
       <option value="<?= $index ?>"><?= $genre->getName(); ?></option>
@@ -13,7 +12,7 @@
   </select>
 
   <select name="year">
-    <option selected=selected value="">Choisissez une année</option>
+    <option selected=selected value="all">Choisissez une année</option>
     <?php for($i=1950; $i<2024; $i++) : ?>
       <option value="<?= $i ?>"><?= $i ?></option>
     <?php endfor; ?>
@@ -27,7 +26,7 @@
   </select> -->
 
   <select name="director_id">
-    <option selected=selected value="">Choisissez un réalisateur</option>
+    <option selected=selected value="all">Choisissez un réalisateur</option>
     <?php $index = 1; ?>
     <?php foreach ($directors as $director) : ?>
       <option value="<?= $index ?>"><?= $director->getFirstname(); ?> <?= $director->getLastname(); ?></option>
@@ -36,7 +35,7 @@
   </select>
 
   <select name="actor_id">
-    <option selected=selected value="">Choisissez un acteur / une actrice</option>
+    <option selected=selected value="all">Choisissez un acteur / une actrice</option>
     <?php $index = 1; ?>
     <?php foreach ($actors as $actor) : ?>
       <option value="<?= $index ?>"><?= $actor->getFirstname(); ?> <?= $actor->getLastname(); ?></option>
@@ -56,7 +55,7 @@
   <div class="card">
 
     <div class="card-poster">
-      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()] + $_GET); ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
+      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()]); ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
     </div>
     <div class="card-data">
       <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>

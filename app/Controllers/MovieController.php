@@ -15,12 +15,65 @@ class MovieController extends CoreController
      * @return void
      */
     public function list()
-    {        
-        $movies = Movie::findAll();
+    {
+        // cette méthode va afficher la liste de films, filtrée ou pas.
+
+        // d'abord, on regarde est-ce que des filtres ont été demandés (présence de données dans $_GET)
+        // je te fais l'exemple avec l'année, mais faut faire ça pour tous les filtres
+        if (isset($_GET['year'])) {
+            // il y a un param year en GET, on le récupère
+            $filter_year = $_GET['year'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_year'] = $filter_year;
+        } else {
+            // on veut TOUTES les années / ne pas filtrer par année
+            $filter_year = "all";
+
+            // on met à jour les filtres enregistrés, c'est à dire on vire la valeur year
+            unset($_SESSION['filter_year']);
+        }
+
+        // allez, je fais aussi l'exemple pour le directeur
+        if (isset($_GET['director_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_director_id = $_GET['director_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_director_id'] = $filter_director_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_director_id = "all";
+            unset($_SESSION['filter_director_id']);
+        }
+
+        if (isset($_GET['actor_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_actor_id = $_GET['actor_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_actor_id'] = $filter_actor_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_actor_id = "all";
+            unset($_SESSION['filter_actor_id']);
+        }
+
+        if (isset($_GET['genre_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_genre_id = $_GET['genre_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_genre_id'] = $filter_genre_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_genre_id = "all";
+            unset($_SESSION['filter_genre_id']);
+        }
+
+        // une fois tous les filtres gérés, on peut récupérer les films :
+        $movies = Movie::findAllFiltered($filter_year, $filter_genre_id, $filter_director_id, $filter_actor_id);
+
+        // et le reste ça change pas
         $genres = Genre::findAll();
         $directors = Director::findAll();
         $actors = Actor::findAll();
-
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
@@ -29,32 +82,8 @@ class MovieController extends CoreController
         ]);
     }
 
-    public function listFiltered()
-    {
-        dump($_POST);
-        $formData = $_POST;
 
-        $genreId = $_POST['genre_id'];
-        $year = $_POST['year'];
-        $directorId = $_POST['director_id'];
-        $actorId = $_POST['actor_id'];
-        
-        $movies = Movie::findAllFiltered();
-        $genres = Genre::findAll();
-        $directors = Director::findAll();
-        $actors = Actor::findAll();
-        $actor = Actor::find($actorId);
-
-        $this->show('main/movies_list', [
-            'movies' => $movies,
-            'genres' => $genres,
-            'directors' => $directors,
-            'actors' => $actors,
-            'actor' => $actor
-        ]);
-    }
-
-    public function findById($id)
+    public function movieDetail($id)
     {
         dump($id);
         $queryParams = $_GET;
@@ -67,9 +96,75 @@ class MovieController extends CoreController
 
         $dataToSend = [];
         $dataToSend['movie'] = $movie;
-        $dataToSend['queryParams'] = $queryParams;
 
-        $this->show('main/movie_detail', $dataToSend);
+        if (isset($_SESSION['filter_year'])) {
+            // il y a un param year en GET, on le récupère
+            $filter_year = $_SESSION['filter_year'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_year'] = $filter_year;
+        } else {
+            // on veut TOUTES les années / ne pas filtrer par année
+            $filter_year = "all";
+
+            // on met à jour les filtres enregistrés, c'est à dire on vire la valeur year
+            unset($_SESSION['filter_year']);
+        }
+
+        // allez, je fais aussi l'exemple pour le directeur
+        if (isset($_SESSION['filter_director_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_director_id = $_SESSION['filter_director_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_director_id'] = $filter_director_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_director_id = "all";
+            unset($_SESSION['filter_director_id']);
+        }
+
+        if (isset($_SESSION['filter_actor_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_actor_id = $_SESSION['filter_actor_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_actor_id'] = $filter_actor_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_actor_id = "all";
+            unset($_SESSION['filter_actor_id']);
+        }
+
+        if (isset($_SESSION['filter_genre_id'])) {
+            // il y a un param director_id en GET, on le récupère
+            $filter_genre_id = $_SESSION['filter_genre_id'];
+            // on le sauvegarde en session pour utilisation ultérieure
+            $_SESSION['filter_genre_id'] = $filter_genre_id;
+        } else {
+            // on veut TOUS les directeurs / ne pas filtrer par directeur
+            $filter_genre_id = "all";
+            unset($_SESSION['filter_genre_id']);
+        }
+
+        $queryParams = [
+            'genre_id' => $filter_genre_id,
+            'year' => $filter_year,
+            'director_id' => $filter_director_id,
+            'actor_id' => $filter_actor_id,
+        ];
+
+        function buildQueryString($params) {
+            $queryArray = [];
+            foreach ($params as $key => $value) {
+              $queryArray[] = urlencode($key) . '=' . urlencode($value);
+            }
+            return implode('&', $queryArray);
+        }
+
+        $queryString = buildQueryString($queryParams);
+
+        $this->show('main/movie_detail', [
+            'movie' => $movie,
+            'queryString' => $queryString
+        ]);
     }
 
     /**
@@ -101,5 +196,4 @@ class MovieController extends CoreController
             header("Location: /movie_list");
         }
     }
-
 }

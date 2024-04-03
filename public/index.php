@@ -94,7 +94,7 @@ $router->map(
 );
 
 $router->map(
-    'POST',
+    'GET',
     '/movie/listFiltered',
     [
         'method' => 'listFiltered',
@@ -108,7 +108,7 @@ $router->map(
     'GET',
     '/movie/[i:id]',
     [
-        'method' => 'findById',
+        'method' => 'movieDetail',
         'controller' => MovieController::class
     ],
     'movie-detail'
