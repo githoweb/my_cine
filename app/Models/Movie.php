@@ -5,10 +5,6 @@ namespace App\Models;
 use App\Utils\Database;
 use PDO;
 
-/**
- * Une instance de Product = un produit dans la base de données
- * Product hérite de CoreModel
- */
 class Movie extends CoreModel
 {
 
@@ -39,11 +35,6 @@ class Movie extends CoreModel
 
 
 
-    /**
-     * Méthode permettant de récupérer tous les enregistrements de la table product
-     *
-     * @return Movie[]
-     */
     public static function findAll()
     {
         $pdo = Database::getPDO();
@@ -101,30 +92,17 @@ class Movie extends CoreModel
         return $results;
     }
 
-    /**
-     * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
-     *
-     * @param int $productId ID du produit
-     * @return Movie
-     */
     public static function find($movieId)
     {
-        // récupérer un objet PDO = connexion à la BDD
         $pdo = Database::getPDO();
 
-        // on écrit la requête SQL pour récupérer le produit
         $sql = '
             SELECT *
             FROM movie
             WHERE id = ' . $movieId;
 
-        // query ? exec ?
-        // On fait de la LECTURE = une récupration => query()
-        // si on avait fait une modification, suppression, ou un ajout => exec
         $pdoStatement = $pdo->query($sql);
 
-        // fetchObject() pour récupérer un seul résultat
-        // si j'en avais eu plusieurs => fetchAll
         $result = $pdoStatement->fetchObject('App\Models\Movie');
 
         return $result;

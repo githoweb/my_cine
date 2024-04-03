@@ -77,7 +77,7 @@ $router->map(
     [
         'method' => 'home',
         'controller' => MainController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'main-home'
 );
@@ -88,7 +88,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => MovieController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'movies-list'
 );
@@ -99,7 +99,7 @@ $router->map(
     [
         'method' => 'listFiltered',
         'controller' => MovieController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'movies-listFiltered'
 );
@@ -109,8 +109,7 @@ $router->map(
     '/movie/[i:id]',
     [
         'method' => 'findById',
-        'controller' => MovieController::class,
-        'acl' => ["admin"]
+        'controller' => MovieController::class
     ],
     'movie-detail'
 );
@@ -121,7 +120,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => ActorController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'actors-list'
 );
@@ -132,7 +131,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => DirectorController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'directors-list'
 );
@@ -144,7 +143,7 @@ $router->map(
     [
         'method' => 'loginPost',
         'controller' => UserController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'login'
 );
@@ -155,7 +154,7 @@ $router->map(
     [
         'method' => 'logout',
         'controller' => UserController::class ,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'logout'
 );
@@ -167,7 +166,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => UserController::class,
-        'acl' => ["admin"] 
+        // 'acl' => ["admin"] 
     ],
     'user-list'
 );
@@ -179,7 +178,7 @@ $router->map(
     [
         'method' => 'add',
         'controller' => UserController::class,
-        'acl' => ["admin"]
+        // 'acl' => ["admin"]
     ],
     'user-add'
 );
