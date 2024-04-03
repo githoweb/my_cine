@@ -16,18 +16,11 @@ class MovieController extends CoreController
      */
     public function list()
     {        
-        // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
-        // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAll();
         $genres = Genre::findAll();
         $directors = Director::findAll();
         $actors = Actor::findAll();
-        //$prod = new Product();
-        //$products = $prod->findAll();
 
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
@@ -46,20 +39,12 @@ class MovieController extends CoreController
         $directorId = $_POST['director_id'];
         $actorId = $_POST['actor_id'];
         
-        // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
-        // qui ne servait qu'a pouvoir accéder a la méthode find
         $movies = Movie::findAllFiltered();
         $genres = Genre::findAll();
         $directors = Director::findAll();
         $actors = Actor::findAll();
         $actor = Actor::find($actorId);
 
-        //$prod = new Product();
-        //$products = $prod->findAll();
-
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/movies_list', [
             'movies' => $movies,
             'genres' => $genres,
@@ -72,7 +57,6 @@ class MovieController extends CoreController
     public function findById($id)
     {
         dump($id);
-        // Récupérer les paramètres de filtre actuels de la requête GET
         $queryParams = $_GET;
         dump($_GET);
 
@@ -95,9 +79,6 @@ class MovieController extends CoreController
      */
     public function add()
     {
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/movie_add', [
             'movie' => new Movie(),
             'title'   => 'Ajouter un movie',

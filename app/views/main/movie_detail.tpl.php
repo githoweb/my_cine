@@ -4,6 +4,9 @@
 
 <a href="<?= $router->generate('movies-listFiltered', $_GET); ?>" title="">Retour à la liste des films</a>
 
+<br>
+<a href = "javascript:history.back()">Back to previous page</a>
+
 <div class="card">
 
   <div class="card-poster">

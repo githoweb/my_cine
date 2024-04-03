@@ -46,18 +46,6 @@
             </small>
         </div>
 
-        <div class="mb-3">
-            <label for="category">Status de l'utilisateur</label>
-            <select name="status"
-                class="form-control" id="status" aria-describedby="statusHelpBlock">
-                <option value="1"<?= $user->getStatus() === "1" ? " selected" : "" ?>>Actif</option>
-                <option value="2"<?= $user->getStatus() === "2" ? " selected" : "" ?>>Désactivé</option>
-            </select>
-            <small id="categoryHelpBlock" class="form-text text-muted">
-                Le role de l'utilisateur
-            </small>
-        </div>
-
         <div class="d-grid gap-2">
             <button type="submit" class="btn btn-primary mt-5">Valider</button>
         </div>

@@ -186,7 +186,6 @@ class UserController extends CoreController
         $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
         $password  = filter_input(INPUT_POST, 'password');
         $role      = filter_input(INPUT_POST, 'role');
-        $status    = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);   // Check int fait directement par PHP
         $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
 
         if (!self::checkCsrf($tokenCsrf)) {
@@ -208,9 +207,6 @@ class UserController extends CoreController
         if ($role !== "admin" && $role !== "catalog-manager") {
             $tabErreurs[] = "Le role n'est pas correct";
         }
-        if ($status !== 1 && $status !== 2) {
-            $tabErreurs[] = "Le status n'est pas correct";
-        }
 
         // On a une contrainte d'unicité dans la base sur le chmp email
         // Donc on controle que cet email n'y est pas déjà
@@ -225,7 +221,6 @@ class UserController extends CoreController
         $user->setEmail($email);
         $user->setPassword($email);
         $user->setRole($role);
-        $user->setStatus($status);
 
         // Traitement de fin
         if (count($tabErreurs) === 0) {
@@ -286,6 +281,23 @@ class UserController extends CoreController
             }
             // pour retourner 'true', il faut que les 4 flags soient egalement à true
             return $noMinus && $noMajus && $noSpecial && $noNum;
+        }
+    }
+
+    public function delete($id)
+    {
+        $user = AppUser::find($id);
+
+        // On récupère le token Csrf passé directement dans la route sous la forme
+        // /category/delete/id?tokenCsrf=230930239209302930293023902
+
+        $tokenCsrf = filter_input(INPUT_GET, 'tokenCsrf');
+
+        if ($user == null || $user === false || !self::checkCsrf($tokenCsrf)) {
+            header('HTTP/1.0 404 Not Found');
+        } else {
+            $user->delete();
+            header("Location: /user/list");
         }
     }
 }

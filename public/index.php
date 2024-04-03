@@ -76,7 +76,8 @@ $router->map(
     '/',
     [
         'method' => 'home',
-        'controller' => MainController::class
+        'controller' => MainController::class,
+        'acl' => ["admin"]
     ],
     'main-home'
 );
@@ -87,6 +88,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => MovieController::class,
+        'acl' => ["admin"]
     ],
     'movies-list'
 );
@@ -97,6 +99,7 @@ $router->map(
     [
         'method' => 'listFiltered',
         'controller' => MovieController::class,
+        'acl' => ["admin"]
     ],
     'movies-listFiltered'
 );
@@ -107,6 +110,7 @@ $router->map(
     [
         'method' => 'findById',
         'controller' => MovieController::class,
+        'acl' => ["admin"]
     ],
     'movie-detail'
 );
@@ -117,6 +121,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => ActorController::class,
+        'acl' => ["admin"]
     ],
     'actors-list'
 );
@@ -127,6 +132,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => DirectorController::class,
+        'acl' => ["admin"]
     ],
     'directors-list'
 );
@@ -137,7 +143,8 @@ $router->map(
     '/login',
     [
         'method' => 'loginPost',
-        'controller' => UserController::class
+        'controller' => UserController::class,
+        'acl' => ["admin"]
     ],
     'login'
 );
@@ -147,7 +154,8 @@ $router->map(
     '/logout',
     [
         'method' => 'logout',
-        'controller' => UserController::class 
+        'controller' => UserController::class ,
+        'acl' => ["admin"]
     ],
     'logout'
 );
@@ -186,6 +194,18 @@ $router->map(
         'acl' => ["admin"]
     ],
     'user-add-post'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'user-delete'
 );
 
 /* -------------

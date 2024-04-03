@@ -39,11 +39,6 @@ class AppUser extends CoreModel
    */
   private $role;
 
-  /**
-   *
-   * @var int
-   */
-  private $status;
 
       /**
      * Rechercher un enregistrement d'utilisateur dans la database
@@ -132,26 +127,24 @@ class AppUser extends CoreModel
 
     // Ecriture de la requête INSERT INTO
     // $sql = "
-    //     INSERT INTO `app_user` (email, password, firstname, lastname, role, status)
+    //     INSERT INTO `app_user` (email, password, firstname, lastname, role)
     //     VALUES (
     //         :email,
     //         :password,
     //         :firstname,
     //         :lastname,
     //         :role,
-    //         :status
     //     )";
 
     // ¨Préparation de la requete
     $query = $pdo->prepare("
-      INSERT INTO `app_user` (email, password, firstname, lastname, role, status)
+      INSERT INTO `app_user` (email, password, firstname, lastname, role)
       VALUES (
           :email,
           :password,
           :firstname,
           :lastname,
-          :role,
-          :status
+          :role
       )");
 
     // Bind des variables et execute SQL
@@ -161,7 +154,6 @@ class AppUser extends CoreModel
       ':firstname' => $this->getFirstName(),
       ':lastname'  => $this->getLastName(),
       ':role'      => $this->getRole(),
-      ':status'    => $this->getStatus()
     ]);
 
     // Pour être exhaustif, je rensigne l'id de mon objet
@@ -192,7 +184,6 @@ class AppUser extends CoreModel
         firstname = :firstname,
         lastname = :lastname,
         role = :role,
-        status = :status
         updated_at = now()
     where id = :id";
 
@@ -206,7 +197,6 @@ class AppUser extends CoreModel
       ':firstname' => $this->getFirstName(),
       ':lastname'  => $this->getLastName(),
       ':role'      => $this->getRole(),
-      ':status'    => $this->getStatus(),
       ':id'        => $this->getId()
     ]);
 
@@ -234,29 +224,6 @@ class AppUser extends CoreModel
 
     // On retourne VRAI, si au moins une ligne supprimée
     return ($updatedRows > 0);
-  }
-  /**
-   * Get the value of status
-   *
-   * @return  int
-   */
-  public function getStatus()
-  {
-    return $this->status;
-  }
-
-  /**
-   * Set the value of status
-   *
-   * @param  int  $status
-   *
-   * @return  self
-   */
-  public function setStatus(int $status)
-  {
-    $this->status = $status;
-
-    return $this;
   }
 
   /**
