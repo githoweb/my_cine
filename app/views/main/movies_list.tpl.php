@@ -45,7 +45,7 @@
   <div class="card">
 
     <div class="card-poster">
-      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()]); ?>" title=""><img src="<?= $movie->getPoster() ?>" alt="" /></a>
+      <a href="<?= $router->generate('movie-detail', ['id' => $movie->getId()]); ?>" title=""><img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/<?= $movie->getPoster() ?>" alt="" /></a>
     </div>
     <div class="card-data">
       <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>
