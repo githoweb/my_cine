@@ -97,3 +97,16 @@ fieldset button {
   background: #693;
   padding: 0.5rem 0.5rem;
 }
+.personsList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.personsList figure {
+  width: calc(20% - 40px);
+  text-align: center;
+  margin: 20px;
+}
+.personsList figure img {
+  width: 100%;
+  max-width: 100%;
+}
