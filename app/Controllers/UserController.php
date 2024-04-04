@@ -392,13 +392,6 @@ class UserController extends CoreController
         $movie->setDirectorId($director_id);
 
         if (count($tabErreurs) === 0) {
-            // Il n'y a pas d'erreur -> hash password et sauvegard en database
-            if ($movie->save() === false) {
-                $tabErreurs[] = "Echec de la sauvegarde";
-            };
-        }
-
-        if (count($tabErreurs) === 0) {
             header("Location: /user/movies-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
@@ -435,26 +428,20 @@ class UserController extends CoreController
             $tabErreurs[] = "Token inconnu/non recu";
         }
 
-        if ($firstName === null || strlen($firstName) === 0) {
+        if ($firstname === null || strlen($firstname) === 0) {
             $tabErreurs[] = "Le prénom n'est pas correct";
         }
-        if ($lastName === null || strlen($lastName) === 0) {
+        if ($lastname === null || strlen($lastname) === 0) {
             $tabErreurs[] = "Le nom n'est pas correct";
         }
         if ($birth === null || strlen($birth) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
+            $tabErreurs[] = "La date de naissance n'est pas correcte";
         }
         if ($poster === null || strlen($poster) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
+            $tabErreurs[] = "L'image n'est pas correct";
         }
         if ($biography === null || strlen($biography) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-
-        // On a une contrainte d'unicité dans la base sur le chmp email
-        // Donc on controle que cet email n'y est pas déjà
-        if (Actor::findUserByEmail($email) !== false) {
-            $tabErreurs[] = "Cet email est déjà enregistré";
+            $tabErreurs[] = "La biographie n'est pas correcte";
         }
 
         $actor = new Actor();
@@ -496,53 +483,39 @@ class UserController extends CoreController
     {
 
         $tabErreurs = [];
-        $firstName = filter_input(INPUT_POST, 'firstname');
-        $lastName  = filter_input(INPUT_POST, 'lastname');
-        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
-        $password  = filter_input(INPUT_POST, 'password');
-        $role      = filter_input(INPUT_POST, 'role');
+        $firstname = filter_input(INPUT_POST, 'firstname');
+        $lastname  = filter_input(INPUT_POST, 'lastname');
+        $birth      = filter_input(INPUT_POST, 'birth');
+        $poster      = filter_input(INPUT_POST, 'poster');
+        $biography      = filter_input(INPUT_POST, 'biography');
         $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
 
         if (!self::checkCsrf($tokenCsrf)) {
             $tabErreurs[] = "Token inconnu/non recu";
         }
 
-        if ($firstName === null || strlen($firstName) === 0) {
+        if ($firstname === null || strlen($firstname) === 0) {
             $tabErreurs[] = "Le prénom n'est pas correct";
         }
-        if ($lastName === null || strlen($lastName) === 0) {
+        if ($lastname === null || strlen($lastname) === 0) {
             $tabErreurs[] = "Le nom n'est pas correct";
         }
-        if ($email === null || strlen($email) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
+        if ($birth === null || strlen($birth) === 0) {
+            $tabErreurs[] = "La date de naissance n'est pas correcte";
         }
-        if ($password === null || strlen($password) < 4 || !$this->testPwd($password)) {
-            $tabErreurs[] = "Le password n'est pas correct";
+        if ($poster === null || strlen($poster) === 0) {
+            $tabErreurs[] = "L'image n'est pas correct";
         }
-        if ($role !== "admin" && $role !== "catalog-manager") {
-            $tabErreurs[] = "Le role n'est pas correct";
-        }
-
-        // On a une contrainte d'unicité dans la base sur le chmp email
-        // Donc on controle que cet email n'y est pas déjà
-        if (AppUser::findUserByEmail($email) !== false) {
-            $tabErreurs[] = "Cet email est déjà enregistré";
+        if ($biography === null || strlen($biography) === 0) {
+            $tabErreurs[] = "La biographie n'est pas correcte";
         }
 
-        $director = new AppUser();
-        $director->setFirstName($firstName);
-        $director->setLastName($lastName);
-        $director->setEmail($email);
-        $director->setPassword($email);
-        $director->setRole($role);
-
-        if (count($tabErreurs) === 0) {
-            // Il n'y a pas d'erreur -> hash password et sauvegard en database
-            $director->setPassword(password_hash($password, PASSWORD_DEFAULT));
-            if ($director->save() === false) {
-                $tabErreurs[] = "Echec de la sauvegarde";
-            };
-        }
+        $director = new Director();
+        $director->setFirstName($firstname);
+        $director->setLastName($lastname);
+        $director->setBirth($birth);
+        $director->setPoster($poster);
+        $director->setBiography($biography);
 
         if (count($tabErreurs) === 0) {
             header("Location: /user/list");
@@ -570,49 +543,21 @@ class UserController extends CoreController
     {
 
         $tabErreurs = [];
-        $firstName = filter_input(INPUT_POST, 'firstname');
-        $lastName  = filter_input(INPUT_POST, 'lastname');
-        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
-        $password  = filter_input(INPUT_POST, 'password');
-        $role      = filter_input(INPUT_POST, 'role');
+        $name = filter_input(INPUT_POST, 'name');
         $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
 
         if (!self::checkCsrf($tokenCsrf)) {
             $tabErreurs[] = "Token inconnu/non recu";
         }
 
-        if ($firstName === null || strlen($firstName) === 0) {
-            $tabErreurs[] = "Le prénom n'est pas correct";
-        }
-        if ($lastName === null || strlen($lastName) === 0) {
+        if ($name === null || strlen($name) === 0) {
             $tabErreurs[] = "Le nom n'est pas correct";
-        }
-        if ($email === null || strlen($email) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-        if ($password === null || strlen($password) < 4 || !$this->testPwd($password)) {
-            $tabErreurs[] = "Le password n'est pas correct";
-        }
-        if ($role !== "admin" && $role !== "catalog-manager") {
-            $tabErreurs[] = "Le role n'est pas correct";
-        }
-
-        // On a une contrainte d'unicité dans la base sur le chmp email
-        // Donc on controle que cet email n'y est pas déjà
-        if (AppUser::findUserByEmail($email) !== false) {
-            $tabErreurs[] = "Cet email est déjà enregistré";
         }
 
         $genre = new Genre();
-        $genre->setFirstName($firstName);
-        $genre->setLastName($lastName);
-        $genre->setEmail($email);
-        $usgenreer->setPassword($email);
-        $genre->setRole($role);
+        $genre->setName($name);
 
         if (count($tabErreurs) === 0) {
-            // Il n'y a pas d'erreur -> hash password et sauvegard en database
-            $genre->setPassword(password_hash($password, PASSWORD_DEFAULT));
             if ($genre->save() === false) {
                 $tabErreurs[] = "Echec de la sauvegarde";
             };
@@ -623,7 +568,7 @@ class UserController extends CoreController
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
             $this->show('user/add_edit', [
-                'title' => "Ajouter un utilisateur",
+                'title' => "Ajouter un genre",
                 'genre'  => $genre,
                 'errors' => $tabErreurs,
                 'tokenCsrf' => Self::setCsrf()
