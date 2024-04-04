@@ -47,6 +47,12 @@ abstract class CoreModel
         }
     }
 
+    abstract public function insert();
+
+    abstract public function update();
+
+    abstract public function delete();
+
     /**
      * @var int
      */

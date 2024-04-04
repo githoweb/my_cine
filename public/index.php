@@ -207,6 +207,191 @@ $router->map(
     'user-delete'
 );
 
+
+$router->map(
+    'GET',
+    '/user/movies-list',
+    [
+        'method' => 'moviesList',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"] 
+    ],
+    'user-movies-list'
+);
+
+// Ajout d'un utilisateur (route get)
+$router->map(
+    'GET',
+    '/user/movie-add',
+    [
+        'method' => 'addMovie',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"]
+    ],
+    'user-movie-add'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/movie-add',
+    [
+        'method' => 'addMoviePost',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'movie-add-post'
+);
+
+$router->map(
+    'GET',
+    '/movie/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => MovieController::class,
+        'acl' => ["admin"]
+    ],
+    'movie-delete'
+);
+
+$router->map(
+    'GET',
+    '/user/actors-list',
+    [
+        'method' => 'actorsList',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"] 
+    ],
+    'user-actors-list'
+);
+
+// Ajout d'un utilisateur (route get)
+$router->map(
+    'GET',
+    '/user/actor-add',
+    [
+        'method' => 'addActor',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"]
+    ],
+    'actor-add'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/movie-add',
+    [
+        'method' => 'addActorPost',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'add-post'
+);
+
+$router->map(
+    'GET',
+    '/actor/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => ActorController::class,
+        'acl' => ["admin"]
+    ],
+    'actor-delete'
+);
+
+$router->map(
+    'GET',
+    '/user/directors-list',
+    [
+        'method' => 'directorsList',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"] 
+    ],
+    'user-directors-list'
+);
+
+// Ajout d'un utilisateur (route get)
+$router->map(
+    'GET',
+    '/user/director-add',
+    [
+        'method' => 'addDirector',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"]
+    ],
+    'director-add'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/director-add',
+    [
+        'method' => 'addDirectorPost',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'director-add-post'
+);
+
+$router->map(
+    'GET',
+    '/director/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => DirectorController::class,
+        'acl' => ["admin"]
+    ],
+    'director-delete'
+);
+
+$router->map(
+    'GET',
+    '/user/genres-list',
+    [
+        'method' => 'genresList',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"] 
+    ],
+    'user-genres-list'
+);
+
+// Ajout d'un utilisateur (route get)
+$router->map(
+    'GET',
+    '/user/genre-add',
+    [
+        'method' => 'addGenre',
+        'controller' => UserController::class,
+        // 'acl' => ["admin"]
+    ],
+    'genre-add'
+);
+
+// Ajout d'un utilisateur (route post)
+$router->map(
+    'POST',
+    '/user/genre-add',
+    [
+        'method' => 'addGenrePost',
+        'controller' => UserController::class,
+        'acl' => ["admin"]
+    ],
+    'genre-add-post'
+);
+
+$router->map(
+    'GET',
+    '/genre/delete/[i:id]',
+    [
+        'method' => 'delete',
+        'controller' => GenreController::class,
+        'acl' => ["admin"]
+    ],
+    'genre-delete'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/

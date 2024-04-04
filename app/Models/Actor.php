@@ -60,11 +60,6 @@ class Actor extends CoreModel
         // return $result;
     }
 
-    /**
-     * Méthode permettant de récupérer tous les enregistrements de la table product
-     *
-     * @return Actor[]
-     */
     public static function findAll()
     {
         $pdo = Database::getPDO();
@@ -73,6 +68,86 @@ class Actor extends CoreModel
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Actor');
 
         return $results;
+    }
+
+    public function insert()
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "INSERT INTO actor (firstname, lastname, birth, poster, biography)
+                VALUES (:firstname, :lastname, :birth, :poster, :biography)";
+                
+        $query = $pdo->prepare($sql);
+
+        $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
+        $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
+        $query->bindValue(':birth'     ,$this->birth, PDO::PARAM_STR);
+        $query->bindValue(':poster'       ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
+
+        $nbLignesModifiees = $query->execute();
+
+        if ($nbLignesModifiees > 0) {
+            $this->id = $pdo->lastInsertId();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function update()
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "
+            UPDATE actor
+            SET 
+                firstname = :firstname,
+                lastname = :lastname,
+                birth = :birth,
+                poster = :poster,
+                biography = :biography,
+                updated_at = NOW()
+                WHERE id = :id;
+        ";
+
+        $query = $pdo->prepare($sql);
+        // Execution de la requête de mise à jour (exec, pas query)
+
+        $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
+        $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
+        $query->bindValue(':birth'     ,$this->birth, PDO::PARAM_STR);
+        $query->bindValue(':poster'       ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
+        $query->bindValue(':id'          ,$this->id);
+
+        // execution de la requête SQL
+        $nbLignesModifiees = $query->execute();
+
+        // Je teste que exec a bien ajouté 1 ligne 
+        if ($nbLignesModifiees) {
+            // Récupération de la valeur de l'id généré par la database
+            // et mise à jour du champ id de l'instance courante
+            return true;
+        } else {
+            // Erreur, la requête sql n'a pas fonctionné
+            return false;
+        }
+    }
+
+    public function delete()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "DELETE FROM actor WHERE id = :id";
+
+        $query = $pdo->prepare($sql);
+        
+        $query->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $query->execute() > 0;
     }
     
 

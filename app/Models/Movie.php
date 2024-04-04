@@ -28,8 +28,13 @@ class Movie extends CoreModel
      * @var string
      */
     private $date;
+        /**
+     * @var int
+     */
+    protected $director_id;
+
     /**
-     * @var string
+     * @var striintng
      */
     protected $id;
 
@@ -110,6 +115,95 @@ class Movie extends CoreModel
         $result = $pdoStatement->fetchObject('App\Models\Movie');
 
         return $result;
+    }
+
+    public function insert()
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "INSERT INTO movie (title, synopsis, poster, duration, date, director_id)
+                VALUES (:title, :description, :poster, :duration, :date, :director_id)";
+                
+        $query = $pdo->prepare($sql);
+
+        $query->bindValue(':title'        ,$this->title, PDO::PARAM_STR);
+        $query->bindValue(':synopsis' ,$this->synopsis, PDO::PARAM_STR);
+        $query->bindValue(':poster'     ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':duration'       ,$this->duration, PDO::PARAM_STR);
+        $query->bindValue(':date'        ,$this->date, PDO::PARAM_STR);
+        $query->bindValue(':director_id'    ,$this->director_id, PDO::PARAM_INT);
+
+        $nbLignesModifiees = $query->execute();
+
+        // Je teste que exec a bien ajouté 1 ligne 
+        if ($nbLignesModifiees > 0) {
+            // Récupération de la valeur de l'id généré par la database
+            // et mise à jour du champ id de l'instance courante
+            $this->id = $pdo->lastInsertId();
+            return true;
+        } else {
+            // Erreur, la requête sql n'a pas fonctionné
+            return false;
+        }
+    }
+
+    public function update()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "
+            UPDATE movie
+            SET 
+                title = :title,
+                synopsis = :synopsis,
+                poster = :poster,
+                duration = :duration,
+                date = :date,
+                director_id = :director_id,
+                updated_at = NOW()
+                WHERE id = :id;
+        ";
+
+        $query = $pdo->prepare($sql);
+        // Execution de la requête de mise à jour (exec, pas query)
+
+        $query->bindValue(':title'        ,$this->title, PDO::PARAM_STR);
+        $query->bindValue(':synopsis' ,$this->synopsis, PDO::PARAM_STR);
+        $query->bindValue(':poster'     ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':duration'       ,$this->duration, PDO::PARAM_STR);
+        $query->bindValue(':date'        ,$this->date, PDO::PARAM_INT);
+        $query->bindValue(':director_id'    ,$this->director_id, PDO::PARAM_INT);
+        $query->bindValue(':id'          ,$this->id);
+
+        // execution de la requête SQL
+        $nbLignesModifiees = $query->execute();
+
+        // Je teste que exec a bien ajouté 1 ligne 
+        if ($nbLignesModifiees) {
+            // Récupération de la valeur de l'id généré par la database
+            // et mise à jour du champ id de l'instance courante
+            return true;
+        } else {
+            // Erreur, la requête sql n'a pas fonctionné
+            return false;
+        }
+    }
+
+    public function delete()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "DELETE FROM movie WHERE id = :id";
+
+        $query = $pdo->prepare($sql);
+        
+        $query->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $query->execute() > 0;
     }
 
 

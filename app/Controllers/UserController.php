@@ -3,6 +3,10 @@
 namespace App\Controllers;
 
 use App\Models\AppUser;
+use App\Models\Movie;
+use App\Models\Actor;
+use App\Models\Director;
+use App\Models\Genre;
 use App\Utils\Database;
 
 class UserController extends CoreController
@@ -142,7 +146,8 @@ class UserController extends CoreController
     public function list()
     {
          $this->show('user/list', [
-            'users' => AppUser::findAll()
+            'users' => AppUser::findAll(),
+            'tokenCsrf' => self::setCsrf()
         ]);
     }
 
@@ -160,22 +165,6 @@ class UserController extends CoreController
         ]);
     }
 
-    /**
-     * Fonction de test password
-     *
-     * @param string $password  le password à tester
-     * @param integer $minLength la longueur min du password (default = 8)
-     * @param boolean $noMinus true si on ne doit pas tester les minuscules
-     * @param boolean $noMajus true si on ne doit pas tester les majuscules
-     * @param boolean $noSpecial true si on ne doit pas tester les cars spéciaux
-     * @param boolean $noNum true si on ne doit pas tester les chiffres
-     * @return void
-     */
-    /**
-     * Controlleur utilisé pour gérer les données POST soumises par le formulaire add user
-     *
-     * @return void
-     */
     public function addPost()
     {
 
@@ -244,6 +233,17 @@ class UserController extends CoreController
         }
     }
 
+/**
+     * Fonction de test password
+     *
+     * @param string $password  le password à tester
+     * @param integer $minLength la longueur min du password (default = 8)
+     * @param boolean $noMinus true si on ne doit pas tester les minuscules
+     * @param boolean $noMajus true si on ne doit pas tester les majuscules
+     * @param boolean $noSpecial true si on ne doit pas tester les cars spéciaux
+     * @param boolean $noNum true si on ne doit pas tester les chiffres
+     * @return void
+     */
     function testPwd($password, $minLength = 8, $noMinus = false, $noMajus = false, $noSpecial = false, $noNum = false)
     {
 
@@ -300,4 +300,336 @@ class UserController extends CoreController
             header("Location: /user/list");
         }
     }
+
+    public function moviesList()
+    {
+         $this->show('user/movies_list', [
+            'movies' => Movie::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function actorsList()
+    {
+         $this->show('user/actors_list', [
+            'actors' => Actor::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function directorsList()
+    {
+         $this->show('user/directors_list', [
+            'directors' => Director::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function genresList()
+    {
+         $this->show('user/genres_list', [
+            'genres' => Genre::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function addMovie()
+    {
+        $this->show('user/movie-add_edit', [
+            'title' => "Ajouter un film",
+            'movie'  => new Movie(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    
+    public function addMoviePost()
+    {
+
+        $tabErreurs = [];
+        $title = filter_input(INPUT_POST, 'title');
+        $poster  = filter_input(INPUT_POST, 'poster');
+        $duration  = filter_input(INPUT_POST, 'duration');
+        $date      = filter_input(INPUT_POST, 'date');
+        $synopsis      = filter_input(INPUT_POST, 'synopsis');
+        $genre_id      = filter_input(INPUT_POST, 'genre_id');
+        $director_id      = filter_input(INPUT_POST, 'director_id');
+        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
+
+        if (!self::checkCsrf($tokenCsrf)) {
+            $tabErreurs[] = "Token inconnu/non recu";
+        }
+
+        if ($title === null || strlen($title) === 0) {
+            $tabErreurs[] = "Le prénom n'est pas correct";
+        }
+        if ($poster === null || strlen($poster) === 0) {
+            $tabErreurs[] = "Le nom n'est pas correct";
+        }
+        if ($duration === null || strlen($duration) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($date === null || strlen($date) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($synopsis === null || strlen($synopsis) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($genre_id === null || strlen($genre_id) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($director_id === null || strlen($director_id) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+
+        $movie = new Movie();
+        $movie->setTitle($title);
+        $movie->setPoster($poster);
+        $movie->setDuration($duration);
+        $movie->setDate($date);
+        $movie->setSynopsis($synopsis);
+        $movie->setGenreId($genre_id);
+        $movie->setDirectorId($director_id);
+
+        if (count($tabErreurs) === 0) {
+            // Il n'y a pas d'erreur -> hash password et sauvegard en database
+            if ($movie->save() === false) {
+                $tabErreurs[] = "Echec de la sauvegarde";
+            };
+        }
+
+        if (count($tabErreurs) === 0) {
+            header("Location: /user/movies-list");
+        } else {
+            // Il y a des erreurs -> affichage du form avec les données saisies
+            $this->show('user/add-movie_edit', [
+                'title' => "Ajouter un film",
+                'movie'  => $movie,
+                'errors' => $tabErreurs,
+                'tokenCsrf' => Self::setCsrf()
+            ]);
+        }
+    }
+
+    public function addActor()
+    {
+        $this->show('user/add-actor_edit', [
+            'title' => "Ajouter un Acteur",
+            'actor'  => new Actor(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function addActorPost()
+    {
+
+        $tabErreurs = [];
+        $firstname = filter_input(INPUT_POST, 'firstname');
+        $lastname  = filter_input(INPUT_POST, 'lastname');
+        $birth      = filter_input(INPUT_POST, 'birth');
+        $poster      = filter_input(INPUT_POST, 'poster');
+        $biography      = filter_input(INPUT_POST, 'biography');
+        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
+
+        if (!self::checkCsrf($tokenCsrf)) {
+            $tabErreurs[] = "Token inconnu/non recu";
+        }
+
+        if ($firstName === null || strlen($firstName) === 0) {
+            $tabErreurs[] = "Le prénom n'est pas correct";
+        }
+        if ($lastName === null || strlen($lastName) === 0) {
+            $tabErreurs[] = "Le nom n'est pas correct";
+        }
+        if ($birth === null || strlen($birth) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($poster === null || strlen($poster) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($biography === null || strlen($biography) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+
+        // On a une contrainte d'unicité dans la base sur le chmp email
+        // Donc on controle que cet email n'y est pas déjà
+        if (Actor::findUserByEmail($email) !== false) {
+            $tabErreurs[] = "Cet email est déjà enregistré";
+        }
+
+        $actor = new Actor();
+        $actor->setFirstname($firstname);
+        $actor->setLastname($lastname);
+        $birth->setBirth($birth);
+        $poster->setPassword($poster);
+        $biography->setBiography($biography);
+
+        if (count($tabErreurs) === 0) {
+            if ($actor->save() === false) {
+                $tabErreurs[] = "Echec de la sauvegarde";
+            };
+        }
+
+        if (count($tabErreurs) === 0) {
+            header("Location: /user/actor-list");
+        } else {
+            // Il y a des erreurs -> affichage du form avec les données saisies
+            $this->show('user/add-actor_edit', [
+                'title' => "Ajouter un acteur",
+                'actor'  => $actor,
+                'errors' => $tabErreurs,
+                'tokenCsrf' => Self::setCsrf()
+            ]);
+        }
+    }
+
+    public function addDirector()
+    {
+        $this->show('user/add-director_edit', [
+            'title' => "Ajouter un Réalisateur",
+            'director'  => new Director(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function addDirectorPost()
+    {
+
+        $tabErreurs = [];
+        $firstName = filter_input(INPUT_POST, 'firstname');
+        $lastName  = filter_input(INPUT_POST, 'lastname');
+        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
+        $password  = filter_input(INPUT_POST, 'password');
+        $role      = filter_input(INPUT_POST, 'role');
+        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
+
+        if (!self::checkCsrf($tokenCsrf)) {
+            $tabErreurs[] = "Token inconnu/non recu";
+        }
+
+        if ($firstName === null || strlen($firstName) === 0) {
+            $tabErreurs[] = "Le prénom n'est pas correct";
+        }
+        if ($lastName === null || strlen($lastName) === 0) {
+            $tabErreurs[] = "Le nom n'est pas correct";
+        }
+        if ($email === null || strlen($email) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($password === null || strlen($password) < 4 || !$this->testPwd($password)) {
+            $tabErreurs[] = "Le password n'est pas correct";
+        }
+        if ($role !== "admin" && $role !== "catalog-manager") {
+            $tabErreurs[] = "Le role n'est pas correct";
+        }
+
+        // On a une contrainte d'unicité dans la base sur le chmp email
+        // Donc on controle que cet email n'y est pas déjà
+        if (AppUser::findUserByEmail($email) !== false) {
+            $tabErreurs[] = "Cet email est déjà enregistré";
+        }
+
+        $director = new AppUser();
+        $director->setFirstName($firstName);
+        $director->setLastName($lastName);
+        $director->setEmail($email);
+        $director->setPassword($email);
+        $director->setRole($role);
+
+        if (count($tabErreurs) === 0) {
+            // Il n'y a pas d'erreur -> hash password et sauvegard en database
+            $director->setPassword(password_hash($password, PASSWORD_DEFAULT));
+            if ($director->save() === false) {
+                $tabErreurs[] = "Echec de la sauvegarde";
+            };
+        }
+
+        if (count($tabErreurs) === 0) {
+            header("Location: /user/list");
+        } else {
+            // Il y a des erreurs -> affichage du form avec les données saisies
+            $this->show('user/add_edit', [
+                'title' => "Ajouter un utilisateur",
+                'director'  => $director,
+                'errors' => $tabErreurs,
+                'tokenCsrf' => Self::setCsrf()
+            ]);
+        }
+    }
+
+    public function addGenre()
+    {
+        $this->show('user/add-genre_edit', [
+            'title' => "Ajouter un genre",
+            'genre'  => new Genre(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
+    public function addGenrePost()
+    {
+
+        $tabErreurs = [];
+        $firstName = filter_input(INPUT_POST, 'firstname');
+        $lastName  = filter_input(INPUT_POST, 'lastname');
+        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
+        $password  = filter_input(INPUT_POST, 'password');
+        $role      = filter_input(INPUT_POST, 'role');
+        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
+
+        if (!self::checkCsrf($tokenCsrf)) {
+            $tabErreurs[] = "Token inconnu/non recu";
+        }
+
+        if ($firstName === null || strlen($firstName) === 0) {
+            $tabErreurs[] = "Le prénom n'est pas correct";
+        }
+        if ($lastName === null || strlen($lastName) === 0) {
+            $tabErreurs[] = "Le nom n'est pas correct";
+        }
+        if ($email === null || strlen($email) === 0) {
+            $tabErreurs[] = "L'email n'est pas correct";
+        }
+        if ($password === null || strlen($password) < 4 || !$this->testPwd($password)) {
+            $tabErreurs[] = "Le password n'est pas correct";
+        }
+        if ($role !== "admin" && $role !== "catalog-manager") {
+            $tabErreurs[] = "Le role n'est pas correct";
+        }
+
+        // On a une contrainte d'unicité dans la base sur le chmp email
+        // Donc on controle que cet email n'y est pas déjà
+        if (AppUser::findUserByEmail($email) !== false) {
+            $tabErreurs[] = "Cet email est déjà enregistré";
+        }
+
+        $genre = new Genre();
+        $genre->setFirstName($firstName);
+        $genre->setLastName($lastName);
+        $genre->setEmail($email);
+        $usgenreer->setPassword($email);
+        $genre->setRole($role);
+
+        if (count($tabErreurs) === 0) {
+            // Il n'y a pas d'erreur -> hash password et sauvegard en database
+            $genre->setPassword(password_hash($password, PASSWORD_DEFAULT));
+            if ($genre->save() === false) {
+                $tabErreurs[] = "Echec de la sauvegarde";
+            };
+        }
+
+        if (count($tabErreurs) === 0) {
+            header("Location: /user/list");
+        } else {
+            // Il y a des erreurs -> affichage du form avec les données saisies
+            $this->show('user/add_edit', [
+                'title' => "Ajouter un utilisateur",
+                'genre'  => $genre,
+                'errors' => $tabErreurs,
+                'tokenCsrf' => Self::setCsrf()
+            ]);
+        }
+    }
+
+
 }

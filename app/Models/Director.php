@@ -33,7 +33,21 @@ class Director extends CoreModel
      */
     private $biography;
 
+    public static function find($genreId)
+    {
+        $pdo = Database::getPDO();
 
+        $sql = '
+            SELECT *
+            FROM director
+            WHERE id = ' . $genreId;
+
+        $pdoStatement = $pdo->query($sql);
+
+        $result = $pdoStatement->fetchObject('App\Models\Director');
+
+        return $result;
+    }
 
     /**
      * Méthode permettant de récupérer tous les enregistrements de la table product
@@ -48,6 +62,86 @@ class Director extends CoreModel
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Director');
 
         return $results;
+    }
+
+    public function insert()
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "INSERT INTO director (firstname, lastname, birth, poster, biography)
+                VALUES (:firstname, :lastname, :birth, :poster, :biography)";
+                
+        $query = $pdo->prepare($sql);
+
+        $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
+        $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
+        $query->bindValue(':birth'     ,$this->birth, PDO::PARAM_STR);
+        $query->bindValue(':poster'       ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
+
+        $nbLignesModifiees = $query->execute();
+
+        if ($nbLignesModifiees > 0) {
+            $this->id = $pdo->lastInsertId();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function update()
+    {
+        $pdo = Database::getPDO();
+
+        $sql = "
+            UPDATE director
+            SET 
+                firstname = :firstname,
+                lastname = :lastname,
+                birth = :birth,
+                poster = :poster,
+                biography = :biography,
+                updated_at = NOW()
+                WHERE id = :id;
+        ";
+
+        $query = $pdo->prepare($sql);
+        // Execution de la requête de mise à jour (exec, pas query)
+
+        $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
+        $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
+        $query->bindValue(':birth'     ,$this->birth, PDO::PARAM_STR);
+        $query->bindValue(':poster'       ,$this->poster, PDO::PARAM_STR);
+        $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
+        $query->bindValue(':id'          ,$this->id);
+
+        // execution de la requête SQL
+        $nbLignesModifiees = $query->execute();
+
+        // Je teste que exec a bien ajouté 1 ligne 
+        if ($nbLignesModifiees) {
+            // Récupération de la valeur de l'id généré par la database
+            // et mise à jour du champ id de l'instance courante
+            return true;
+        } else {
+            // Erreur, la requête sql n'a pas fonctionné
+            return false;
+        }
+    }
+
+    public function delete()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "DELETE FROM director WHERE id = :id";
+
+        $query = $pdo->prepare($sql);
+        
+        $query->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $query->execute() > 0;
     }
     
 

@@ -57,7 +57,7 @@ class DirectorController extends CoreController
             header('HTTP/1.0 404 Not Found');
         } else {
             $director->delete();
-            header("Location: /director_list");
+            header("Location: /directors_list");
         }
     }
 
