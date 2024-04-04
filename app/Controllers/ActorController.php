@@ -7,45 +7,36 @@ use App\Models\Actor;
 class ActorController extends CoreController
 {
     /**
-     * Méthode s'occupant de la liste des actors
+     * liste des acteurs
      *
      * @return void
      */
     public function list()
     {
         // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
-        // qui ne servait qu'a pouvoir accéder a la méthode find
+        // qui ne servait qu'a pouvoir accéder à la méthode find
         $actors = Actor::findAll();
 
-        //$prod = new Product();
-        //$products = $prod->findAll();
-
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/actors_list', [
             'actors' => $actors
         ]);
     }
 
     /**
-     * Méthode s'occupant de l'ajout d'un movie
+     * ajout d'un acteur
      *
      * @return void
      */
     public function add()
     {
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/actor_add', [
             'actor' => new Actor(),
-            'title'   => 'Ajouter un actor',
+            'title'   => 'Ajouter un acteur',
         ]);
     }
 
     /**
-     * Methode pour supprimer un actor
+     * supprimer un acteur
      *
      * @return void
      */

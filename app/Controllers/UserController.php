@@ -12,7 +12,7 @@ use App\Utils\Database;
 class UserController extends CoreController
 {
     /**
-     * Méthode s'occupant d'afficher le fomulaire de login
+     * affiche le formulaire de login
      *
      * @return void
      */
@@ -24,8 +24,7 @@ class UserController extends CoreController
     }
 
     /**
-     * Méthode s'occupant de traiter les données POST recues
-     * après soumission du formulire de login
+     * traite les données POST recues après soumission du formulaire de login
      *
      * @return void
      */
@@ -49,47 +48,38 @@ class UserController extends CoreController
 
             // Sinon c'est forcément un 'POST' -> traitement des données du form
 
-            // Initialisation de mon tableau d'erreur (vide)
+            // Initialisation d'un tableau d'erreur
             $tabErreurs = [];
 
             // Récupération des données de formulaire (contenues dans $_POST)
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
             $password = filter_input(INPUT_POST, 'password');
 
-            // Vérification des données saisies -> email
             if ($email === null || $email === false) {
                 $tabErreurs[] = "L'adresse email est incorrecte";
             }
 
-            // Vérification des données saisies -> password
             if ($password === null || $password === false || $password === '') {
                 $tabErreurs[] = "Le password ne doit pas être vide";
             }
 
-            // On recherche cette @mail dans la base
-            // false sera retourné si l'utilisateur n'existe pas
+            // On recherche l'email dans la base
+            // retourne false si l'utilisateur n'existe pas
             $user = AppUser::findUserByEmail($email);
 
             if ($user === false) {
                 // L'utilisateur n'existe pas dans la base
                 $tabErreurs[] = "Cette adresse email n'existe pas";
             } else {
-                // Utilisateur trouvé dans la base
-                // On vérifie maintenant le password
+                // On vérifie le password
 
-                // * !true est egal à false
-                // * !false est egal à true
                 if (password_verify($password, $user->getPassword()) === false) {
                     // Le password n'est pas bon -> erreur
                     $tabErreurs[] = "Le mot de passe n'est pas le bon";
                 }
             }
 
-            // Toutes les vérifications sont faites, on va maintenant:
-            // - soit réafficher le formulaire s'il y a des erreurs
-            // - soit mémoriser le user en session (mode connecté)
             if (count($tabErreurs) > 0) {
-
                 // Il y a des erreurs, on réaffiche le formulaire
                 // avec l'@mail saisie
                 $this->show('user/login', [
@@ -97,11 +87,8 @@ class UserController extends CoreController
                     'errors' => $tabErreurs
                 ]);
             } else {
-                // Aucune erreur, cela signifie que l'utilisateur est
-                // bien dans la base et que le mot de passe saisi
-                // est le bon
-
-                // Mise en session de l'user id et de l'user object
+                // l'utilisateur est bien dans la base et le mot de passe saisi est correct
+                // Enregistrement en session du user id et du user object
 
                 $_SESSION['userId'] = $user->getId();
                 $_SESSION['userObject'] = $user;
@@ -118,7 +105,7 @@ class UserController extends CoreController
     }
 
     /**
-     * Controlleur utilisé pour se déconnecter
+     * se déconnecter
      *
      * @return void
      */
@@ -139,7 +126,7 @@ class UserController extends CoreController
     }
 
     /**
-     * COntrolleur utilisé pour lister l'ensembles des utilisateurs enregistrés
+     * lister l'ensemble des utilisateurs enregistrés
      *
      * @return void
      */
@@ -152,7 +139,7 @@ class UserController extends CoreController
     }
 
     /**
-     * Controlleur utilisé pour l'ajout d'un utilisateur (affichage form)
+     * ajout d'un utilisateur (affichage)
      *
      * @return void
      */
@@ -172,7 +159,7 @@ class UserController extends CoreController
         // Récupération des données du formulaire (POST)
         $firstName = filter_input(INPUT_POST, 'firstname');
         $lastName  = filter_input(INPUT_POST, 'lastname');
-        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);  // check mail fait par PHP directement
+        $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $password  = filter_input(INPUT_POST, 'password');
         $role      = filter_input(INPUT_POST, 'role');
         $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
@@ -197,13 +184,13 @@ class UserController extends CoreController
             $tabErreurs[] = "Le role n'est pas correct";
         }
 
-        // On a une contrainte d'unicité dans la base sur le chmp email
-        // Donc on controle que cet email n'y est pas déjà
+        // On a une contrainte d'unicité dans la base sur le champ email
+        // on controle que cet email n'existe pas déjà
         if (AppUser::findUserByEmail($email) !== false) {
             $tabErreurs[] = "Cet email est déjà enregistré";
         }
 
-        // Init de l'objet AppUser
+        // Initialisation d'un objet AppUser
         $user = new AppUser();
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
@@ -211,7 +198,6 @@ class UserController extends CoreController
         $user->setPassword($email);
         $user->setRole($role);
 
-        // Traitement de fin
         if (count($tabErreurs) === 0) {
             // Il n'y a pas d'erreur -> hash password et sauvegard en database
             $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
@@ -223,7 +209,7 @@ class UserController extends CoreController
         if (count($tabErreurs) === 0) {
             header("Location: /user/list");
         } else {
-            // Il y a des erreurs -> affichage du form avec les données saisies
+            // Il y a des erreurs -> affichage du formulaire avec les données saisies
             $this->show('user/add_edit', [
                 'title' => "Ajouter un utilisateur",
                 'user'  => $user,
@@ -237,8 +223,8 @@ class UserController extends CoreController
     {
         $user = AppUser::find($id);
 
-        // On récupère le token Csrf passé directement dans la route sous la forme
-        // /category/delete/id?tokenCsrf=230930239209302930293023902
+        // On récupère le token Csrf passé dans la route sous la forme
+        // /user/delete/id?tokenCsrf=ziuefchieuhefiefzuhezfiuh
 
         $tokenCsrf = filter_input(INPUT_GET, 'tokenCsrf');
 
@@ -560,8 +546,8 @@ class UserController extends CoreController
                 return false;
             }
 
-            // On splite le password cractere par caractere dans un tableau
-            // ou parcours le password caractere par caractere
+            // On splite le password caractère par caractère dans un tableau
+            // ou parcours le password caractère par caractère
             foreach (str_split($password) as $c) {
                 // Test des minuscules
                 // Le 1er test (!noMinus) permet de ne plus faire le strpos si on a deja trouvé

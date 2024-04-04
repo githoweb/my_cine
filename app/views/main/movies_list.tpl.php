@@ -18,13 +18,6 @@
     <?php endfor; ?>
   </select>
 
-  <!-- <select name="movie_id">
-    <option selected=selected>Choisissez un réalisateur</option>
-      <?php /*foreach ($directors as $director) : ?>
-      <option value="<?= $director->getId() ?>"><?= $director->getTitle() ?></option>
-    <?php endforeach*/ ?>
-  </select> -->
-
   <select name="director_id">
     <option selected=selected value="all">Choisissez un réalisateur</option>
     <?php $index = 1; ?>
@@ -43,14 +36,11 @@
     <?php endforeach; ?>
   </select>
 
-  
-
   <button type="submit">Valider</button>
 
 </form>
 
 <?php foreach ($movies as $movie) : ?>
-<?php  dump($movie) ?>
 
   <div class="card">
 

@@ -5,22 +5,15 @@ namespace App\Models;
 use App\Utils\Database;
 use PDO;
 
-/**
- * Une instance de Product = un produit dans la base de données
- * Product hérite de CoreModel
- */
 class Genre extends CoreModel
 {
-
     /**
      * @var string
      */
     private $name;
 
-
-
     /**
-     * Méthode permettant de récupérer tous les enregistrements de la table product
+     * récupérer tous les enregistrements de la table genre
      *
      * @return Genre[]
      */
@@ -77,10 +70,8 @@ class Genre extends CoreModel
 
     public function update()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "
             UPDATE genre
             SET 
@@ -90,12 +81,10 @@ class Genre extends CoreModel
         ";
 
         $query = $pdo->prepare($sql);
-        // Execution de la requête de mise à jour (exec, pas query)
 
         $query->bindValue(':name'        ,$this->name, PDO::PARAM_STR);
         $query->bindValue(':id'          ,$this->id);
 
-        // execution de la requête SQL
         $nbLignesModifiees = $query->execute();
 
         // Je teste que exec a bien ajouté 1 ligne 
@@ -111,10 +100,8 @@ class Genre extends CoreModel
 
     public function delete()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "DELETE FROM genre WHERE id = :id";
 
         $query = $pdo->prepare($sql);
@@ -143,6 +130,4 @@ class Genre extends CoreModel
     {
         $this->name = $name;
     }
-
-
 }

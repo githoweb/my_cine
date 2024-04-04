@@ -10,24 +10,24 @@ use App\Models\Actor;
 class MovieController extends CoreController
 {
     /**
-     * Méthode s'occupant de la liste des movies
+     * liste des films
      *
      * @return void
      */
     public function list()
     {
-        // cette méthode va afficher la liste de films, filtrée ou pas.
+        // affiche la liste de films, filtrée ou pas.
 
-        // d'abord, on regarde est-ce que des filtres ont été demandés (présence de données dans $_GET)
+        // est-ce que des filtres ont été demandés (présence de données dans $_GET)
         if (isset($_GET['year'])) {
             $filter_year = $_GET['year'];
             // on le sauvegarde en session pour utilisation ultérieure
             $_SESSION['filter_year'] = $filter_year;
         } else {
-            // on veut TOUTES les années / ne pas filtrer par année
+            // on veut toutes les années / ne pas filtrer par année
             $filter_year = "all";
 
-            // on met à jour les filtres enregistrés, c'est à dire on vire la valeur year
+            // on met à jour les filtres enregistrés, on supprime la valeur year
             unset($_SESSION['filter_year']);
         }
 
@@ -71,14 +71,10 @@ class MovieController extends CoreController
 
     public function movieDetail($id)
     {
-        dump($id);
         $queryParams = $_GET;
-        dump($_GET);
 
         $movieModel = new Movie();
         $movie = $movieModel->find($id);
-
-        dump($movie);
 
         $dataToSend = [];
         $dataToSend['movie'] = $movie;
@@ -139,7 +135,7 @@ class MovieController extends CoreController
     }
 
     /**
-     * Méthode s'occupant de l'ajout d'un movie
+     * ajout d'un film
      *
      * @return void
      */
@@ -152,7 +148,7 @@ class MovieController extends CoreController
     }
 
     /**
-     * Methode pour supprimer un movie
+     * supprimer un film
      *
      * @return void
      */

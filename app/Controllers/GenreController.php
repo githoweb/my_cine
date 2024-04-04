@@ -6,8 +6,6 @@ use App\Models\Genre;
 
 class GenreController extends CoreController
 {
-
-
   public function delete($id)
     {
         $genre = Genre::find($id);

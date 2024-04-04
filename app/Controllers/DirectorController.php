@@ -7,37 +7,28 @@ use App\Models\Director;
 class DirectorController extends CoreController
 {
     /**
-     * Méthode s'occupant de la liste des directors
+     * liste des réalisateurs
      *
      * @return void
      */
     public function list()
     {
-        // On accède a la méthode find déclarée en statique ce qui évite de créer une instance
-        // qui ne servait qu'a pouvoir accéder a la méthode find
+        // méthode find déclarée en statique : évite de créer une instance
+        // qui ne servait qu'a accéder à la méthode find
         $directors = Director::findAll();
 
-        //$prod = new Product();
-        //$products = $prod->findAll();
-
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/directors_list', [
             'directors' => $directors
         ]);
     }
 
     /**
-     * Méthode s'occupant de l'ajout d'un director
+     * ajout d'un réalisateur
      *
      * @return void
      */
     public function add()
     {
-        // On appelle la méthode show() de l'objet courant
-        // En argument, on fournit le fichier de Vue
-        // Par convention, chaque fichier de vue sera dans un sous-dossier du nom du Controller
         $this->show('main/actor_add', [
             'director' => new Director(),
             'title'   => 'Ajouter un director',
@@ -45,7 +36,7 @@ class DirectorController extends CoreController
     }
 
     /**
-     * Methode pour supprimer un director
+     * Methode pour supprimer un réalisateur
      *
      * @return void
      */

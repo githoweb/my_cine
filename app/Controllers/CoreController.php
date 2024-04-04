@@ -4,9 +4,6 @@ namespace App\Controllers;
 
 class CoreController
 {
-    /**
-     * Le constructeur est utilisé pour faire des "pré-checks" avant d'appeler le controlleur
-     */
     public function __construct()
     {
         global $match;
@@ -16,14 +13,14 @@ class CoreController
         // pour l'accès à la page
         if (isset($match['target']['acl'])) {
 
-            // On teste si l'utilisateur à les droits requis
+            // On teste si l'utilisateur a les droits
             $this->checkAuthorization($match['target']['acl']);
         }
 
     }
 
     /**
-     * Génère un token CSRF, le mémorise en session et le retourne a l'appelant
+     * Génère un token CSRF, le mémorise codé en session et le retourne
      *
      * @return string
      */
@@ -34,10 +31,9 @@ class CoreController
     }
 
     /**
-     * Permet de vérifier que le token recu en POST après soumission
-     * est bien celui stocké en session
+     * Vérifie que le token recu en POST après soumission est bien celui stocké en session
      *
-     * @param [type] $tokenCsrf
+     * @param $tokenCsrf
      * @return void
      */
     public static function checkCsrf($tokenCsrf)
@@ -48,8 +44,7 @@ class CoreController
     }
 
     /**
-     * Cette fonction permet de vérifier que l'utilisateur connecté
-     * Dispose bien d'un rôle requis pour l'accès a cette page
+     * vérifie que l'utilisateur connecté dispose bien d'un rôle requis pour l'accès a cette page
      * 
      * @param array $roles
      * @return bool
@@ -57,22 +52,20 @@ class CoreController
     public function checkAuthorization($roles = [])
     {
         if (!isset($_SESSION['userId'])) {
-            // Utilisateur non connécté -> erreur -> go vers la page de login
+            // Utilisateur non connécté :  on renvoit à la page de login
             header("Location: /login");
             exit;
         } else {
             $user = $_SESSION['userObject'];
             $userRole = $user->getRole();
 
-            // Le role de l'utilisateur est il présent dans la liste
-            // passée en parametre
+            // Le role de l'utilisateur est il présent dans la liste passée en paramètre
             $hasRole = in_array($userRole, $roles);
 
             if ($hasRole === true) {
-                // Ok, on retourne chez l'appelant
                 return true;
             } else {
-                // KO on va vers la page erreur 403 : forbidden access
+                // non : erreur 403 : forbidden access
                 $this->show("error/err403");
                 exit;
             }
@@ -80,7 +73,7 @@ class CoreController
     }
 
     /**
-     * Méthode permettant d'afficher du code HTML en se basant sur les views
+     * affiche du code HTML en se basant sur les views
      *
      * @param string $viewName Nom du fichier de vue
      * @param array $viewData Tableau des données à transmettre aux vues
@@ -88,25 +81,19 @@ class CoreController
      */
     protected function show(string $viewName, $viewData = [])
     {
-        // On globalise $router car on ne sait pas faire mieux pour l'instant
+        // On globalise $router pour le récupérer depuis le frontController
         global $router;
 
-        // Comme $viewData est déclarée comme paramètre de la méthode show()
-        // les vues y ont accès
-        // ici une valeur dont on a besoin sur TOUTES les vues
-        // donc on la définit dans show()
+        // $viewData est déclarée comme paramètre de la méthode show()
+        // toutes les vues y ont accès
         $viewData['currentPage'] = $viewName;
 
-        // définir l'url absolue pour nos assets
+        // définit l'url absolue pour les assets
         $viewData['assetsBaseUri'] = $_SERVER['BASE_URI'] . 'assets/';
-        // définir l'url absolue pour la racine du site
-        // /!\ != racine projet, ici on parle du répertoire public/
+        // définir l'url absolue pour la racine du site (le répertoire public) != racine projet
         $viewData['baseUri'] = $_SERVER['BASE_URI'];
 
-
-
-        // On veut désormais accéder aux données de $viewData, mais sans accéder au tableau
-        // La fonction extract permet de créer une variable pour chaque élément du tableau passé en argument
+        // La fonction extract permet de créer une variable pour chaque élément du tableau $viewData
         extract($viewData);
 
         // => la variable $currentPage existe désormais, et sa valeur est $viewName

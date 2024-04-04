@@ -5,10 +5,6 @@ namespace App\Models;
 use App\Utils\Database;
 use PDO;
 
-/**
- * Une instance de Product = un produit dans la base de données
- * Product hérite de CoreModel
- */
 class Director extends CoreModel
 {
 
@@ -50,7 +46,7 @@ class Director extends CoreModel
     }
 
     /**
-     * Méthode permettant de récupérer tous les enregistrements de la table product
+     * récupérer tous les enregistrements de la table director
      *
      * @return Director[]
      */
@@ -106,7 +102,6 @@ class Director extends CoreModel
         ";
 
         $query = $pdo->prepare($sql);
-        // Execution de la requête de mise à jour (exec, pas query)
 
         $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
         $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
@@ -115,7 +110,6 @@ class Director extends CoreModel
         $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
         $query->bindValue(':id'          ,$this->id);
 
-        // execution de la requête SQL
         $nbLignesModifiees = $query->execute();
 
         // Je teste que exec a bien ajouté 1 ligne 
@@ -131,10 +125,8 @@ class Director extends CoreModel
 
     public function delete()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "DELETE FROM director WHERE id = :id";
 
         $query = $pdo->prepare($sql);
@@ -144,7 +136,6 @@ class Director extends CoreModel
         return $query->execute() > 0;
     }
     
-
     /**
      * Get the value of firstname
      *

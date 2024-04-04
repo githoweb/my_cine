@@ -6,29 +6,12 @@ namespace App\Models;
 // On centralise ici toutes les propriétés et méthodes utiles pour TOUS les Models
 abstract class CoreModel
 {
-    // Déclaration des méthodes que les classes filles doivent
-    // absolument définir, ou alors -> erreur
+    // Déclaration des méthodes que les classes filles doivent absolument définir
+    abstract public function insert();
 
-    /**
-     * Fonction d'ajout d'enregistrement dans la database
-     *
-     * @return bool
-     */
-    // abstract public function insert();
+    abstract public function update();
 
-    /**
-     * Mise a jour d'un enregistrement dans la database
-     *
-     * @return bool
-     */
-    // abstract public function update();
-
-    /**
-     * Suppression d'un enregistrement dans la database
-     *
-     * @return bool
-     */
-    // abstract public function delete();
+    abstract public function delete();
 
     /**
      * Fait la mise à jour ou l'insertion d'un enregistrement en database
@@ -46,12 +29,6 @@ abstract class CoreModel
             return $this->insert();
         }
     }
-
-    abstract public function insert();
-
-    abstract public function update();
-
-    abstract public function delete();
 
     /**
      * @var int

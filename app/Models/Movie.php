@@ -43,8 +43,6 @@ class Movie extends CoreModel
      */
     protected $id;
 
-
-
     public static function findAll()
     {
         $pdo = Database::getPDO();
@@ -57,8 +55,6 @@ class Movie extends CoreModel
 
     public static function findAllFiltered($year = "all", $genre_id = "all", $director_id = "all", $actor_id = "all")
     {
-
-        dump($actor_id);
 
         $pdo = Database::getPDO();
 
@@ -81,22 +77,16 @@ class Movie extends CoreModel
 
         $actorCondition = "";
 
-
         if ($actor_id !== "all") {
             $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
             $conditions[] = "actor_id = " . $actor_id;
         }
 
-        dump($genre_id);
-        dump($director_id);
-        dump($year);
-        dump($actor_id);
-
         if (!empty($conditions)) {
             $sql .= $actorCondition . " WHERE " . implode(" AND ", $conditions);
         }
 
-        dump($sql);
+        // dump($sql);
 
         $pdoStatement = $pdo->query($sql);
 
@@ -155,10 +145,8 @@ class Movie extends CoreModel
 
     public function update()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "
             UPDATE movie
             SET 
@@ -174,7 +162,6 @@ class Movie extends CoreModel
         ";
 
         $query = $pdo->prepare($sql);
-        // Execution de la requête de mise à jour (exec, pas query)
 
         $query->bindValue(':title', $this->title, PDO::PARAM_STR);
         $query->bindValue(':synopsis', $this->synopsis, PDO::PARAM_STR);
@@ -185,7 +172,6 @@ class Movie extends CoreModel
         $query->bindValue(':genre_id', $this->director_id, PDO::PARAM_INT);
         $query->bindValue(':id', $this->id);
 
-        // execution de la requête SQL
         $nbLignesModifiees = $query->execute();
 
         // Je teste que exec a bien ajouté 1 ligne 
@@ -201,10 +187,8 @@ class Movie extends CoreModel
 
     public function delete()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "DELETE FROM movie WHERE id = :id";
 
         $query = $pdo->prepare($sql);
@@ -213,9 +197,6 @@ class Movie extends CoreModel
 
         return $query->execute() > 0;
     }
-
-
-
 
     /**
      * Get the value of title

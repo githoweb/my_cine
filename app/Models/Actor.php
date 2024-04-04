@@ -6,8 +6,7 @@ use App\Utils\Database;
 use PDO;
 
 /**
- * Une instance de Product = un produit dans la base de données
- * Product hérite de CoreModel
+ * Une instance de Actor = un acteur dans la base de données
  */
 class Actor extends CoreModel
 {
@@ -34,30 +33,14 @@ class Actor extends CoreModel
     private $biography;
 
     /**
-     * Méthode permettant de récupérer un enregistrement de la table Actor en fonction d'un id donné
+     * récupére un enregistrement de la table Actor en fonction d'un id donné
      *
      * @param int $actorId ID de l'acteur
      * @return Product
      */
     public static function find($actorId)
     {
-        // récupérer un objet PDO = connexion à la BDD
         $pdo = Database::getPDO();
-
-        // on écrit la requête SQL pour récupérer le produit
-        // $sql = '
-        //     SELECT *
-        //     FROM actor
-        //     WHERE `actor_id`= $actorId ';
-
-
-        // $pdoStatement = $pdo->query($sql);
-
-        // $result = $pdoStatement->fetchObject('App\Models\Actor');
-
-        // dump($result);
-
-        // return $result;
     }
 
     public static function findAll()
@@ -112,7 +95,6 @@ class Actor extends CoreModel
         ";
 
         $query = $pdo->prepare($sql);
-        // Execution de la requête de mise à jour (exec, pas query)
 
         $query->bindValue(':firstname'        ,$this->firstname, PDO::PARAM_STR);
         $query->bindValue(':lastname' ,$this->lastname, PDO::PARAM_STR);
@@ -121,10 +103,9 @@ class Actor extends CoreModel
         $query->bindValue(':biography'        ,$this->biography, PDO::PARAM_INT);
         $query->bindValue(':id'          ,$this->id);
 
-        // execution de la requête SQL
         $nbLignesModifiees = $query->execute();
 
-        // Je teste que exec a bien ajouté 1 ligne 
+        // exec a-t-il ajouté une ligne dans la base de données ?
         if ($nbLignesModifiees) {
             // Récupération de la valeur de l'id généré par la database
             // et mise à jour du champ id de l'instance courante
@@ -137,10 +118,8 @@ class Actor extends CoreModel
 
     public function delete()
     {
-        // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
-        // Ecriture de la requête UPDATE
         $sql = "DELETE FROM actor WHERE id = :id";
 
         $query = $pdo->prepare($sql);
@@ -250,5 +229,4 @@ class Actor extends CoreModel
     {
         $this->biography = $biography;
     }
-
 }
