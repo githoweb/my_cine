@@ -458,7 +458,7 @@ class UserController extends CoreController
         }
 
         if (count($tabErreurs) === 0) {
-            header("Location: /user/actor-list");
+            header("Location: /user/actors-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
             $this->show('user/add-actor_edit', [
@@ -518,10 +518,10 @@ class UserController extends CoreController
         $director->setBiography($biography);
 
         if (count($tabErreurs) === 0) {
-            header("Location: /user/list");
+            header("Location: /user/directors-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add_edit', [
+            $this->show('user/add-director_edit', [
                 'title' => "Ajouter un utilisateur",
                 'director'  => $director,
                 'errors' => $tabErreurs,
@@ -564,10 +564,10 @@ class UserController extends CoreController
         }
 
         if (count($tabErreurs) === 0) {
-            header("Location: /user/list");
+            header("Location: /user/genres-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add_edit', [
+            $this->show('user/add-genre_edit', [
                 'title' => "Ajouter un genre",
                 'genre'  => $genre,
                 'errors' => $tabErreurs,
