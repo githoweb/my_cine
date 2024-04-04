@@ -16,9 +16,10 @@ header a {
 }
 header nav {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
   padding: 20px;
+  position: relative;
 }
 header nav ul {
   display: flex;
@@ -42,6 +43,21 @@ h3 {
   font-size: 1.2rem;
 }
 /* --- FORMS --- */
+fieldset {
+  display: flex;
+  gap: 20px;
+}
+fieldset select {
+  width: 23%;
+  font-size: 1.2rem;
+  padding: 10px;
+}
+fieldset button {
+  width: 8%;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
 /* --- Modules --- */
 .card, .card-data {
   display: flex;
@@ -62,4 +78,16 @@ h3 {
   align-items: start;
   width: calc(100% - 150px);
   padding: 0 20px;
+}
+.logged {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 100%;
+  bottom: 20px;
+  height: 1rem;
+  text-align: center;
+  background: #693;
+  padding: 0.5rem 0.5rem;
 }

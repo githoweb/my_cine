@@ -2,8 +2,11 @@
 
 <form method="get" action="<?= $router->generate('movies-list') ?>">
 
+Filtrer par :
+
+<fieldset>
   <select name="genre_id">
-    <option selected=selected value="all">Choisissez un genre</option>
+    <option selected=selected value="all">genre</option>
     <?php $index = 1; ?>
     <?php foreach ($genres as $genre) : ?>
       <option value="<?= $index ?>"><?= $genre->getName(); ?></option>
@@ -12,14 +15,14 @@
   </select>
 
   <select name="year">
-    <option selected=selected value="all">Choisissez une année</option>
+    <option selected=selected value="all">année</option>
     <?php for($i=1950; $i<2024; $i++) : ?>
       <option value="<?= $i ?>"><?= $i ?></option>
     <?php endfor; ?>
   </select>
 
   <select name="director_id">
-    <option selected=selected value="all">Choisissez un réalisateur</option>
+    <option selected=selected value="all">réalisateur</option>
     <?php $index = 1; ?>
     <?php foreach ($directors as $director) : ?>
       <option value="<?= $index ?>"><?= $director->getFirstname(); ?> <?= $director->getLastname(); ?></option>
@@ -28,7 +31,7 @@
   </select>
 
   <select name="actor_id">
-    <option selected=selected value="all">Choisissez un acteur / une actrice</option>
+    <option selected=selected value="all">acteur/actrice</option>
     <?php $index = 1; ?>
     <?php foreach ($actors as $actor) : ?>
       <option value="<?= $index ?>"><?= $actor->getFirstname(); ?> <?= $actor->getLastname(); ?></option>
@@ -36,7 +39,11 @@
     <?php endforeach; ?>
   </select>
 
-  <button type="submit">Valider</button>
+  <button type="submit">GO</button>
+
+</fieldset>
+
+  
 
 </form>
 

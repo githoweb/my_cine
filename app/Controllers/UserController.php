@@ -96,6 +96,8 @@ class UserController extends CoreController
                 $tabSuccess = [];
                 $tabSuccess[] = "Vous êtes connecté";
 
+                // dump($_SESSION['userObject']);
+
                 $this->show('user/login-logout-success', [
                     'user' => $user,
                     'success' => $tabSuccess
