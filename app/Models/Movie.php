@@ -28,13 +28,18 @@ class Movie extends CoreModel
      * @var string
      */
     private $date;
-        /**
+    /**
      * @var int
      */
     protected $director_id;
 
     /**
-     * @var striintng
+     * @var int
+     */
+    protected $genre_id;
+
+    /**
+     * @var int
      */
     protected $id;
 
@@ -50,7 +55,7 @@ class Movie extends CoreModel
         return $results;
     }
 
-    public static function findAllFiltered($year = "all", $genre_id = "all", $director_id = "all",$actor_id = "all")
+    public static function findAllFiltered($year = "all", $genre_id = "all", $director_id = "all", $actor_id = "all")
     {
 
         dump($actor_id);
@@ -66,18 +71,18 @@ class Movie extends CoreModel
             $conditions[] = "genre_id = " . $genre_id;
         }
 
-        if($director_id !== "all") {
+        if ($director_id !== "all") {
             $conditions[] = "director_id = " . $director_id;
         }
 
-        if($year !== "all") {
+        if ($year !== "all") {
             $conditions[] = "date = " . $year;
         }
 
         $actorCondition = "";
 
 
-        if($actor_id !== "all") {
+        if ($actor_id !== "all") {
             $actorCondition = "INNER JOIN actor_movie ON movie.id = actor_movie.movie_id";
             $conditions[] = "actor_id = " . $actor_id;
         }
@@ -87,7 +92,7 @@ class Movie extends CoreModel
         dump($year);
         dump($actor_id);
 
-        if(!empty($conditions)) {
+        if (!empty($conditions)) {
             $sql .= $actorCondition . " WHERE " . implode(" AND ", $conditions);
         }
 
@@ -121,17 +126,18 @@ class Movie extends CoreModel
     {
         $pdo = Database::getPDO();
 
-        $sql = "INSERT INTO movie (title, synopsis, poster, duration, date, director_id)
-                VALUES (:title, :description, :poster, :duration, :date, :director_id)";
-                
+        $sql = "INSERT INTO movie (title, synopsis, poster, duration, date, director_id, genre_id)
+                VALUES (:title, :description, :poster, :duration, :date, :director_id, :genre_id)";
+
         $query = $pdo->prepare($sql);
 
-        $query->bindValue(':title'        ,$this->title, PDO::PARAM_STR);
-        $query->bindValue(':synopsis' ,$this->synopsis, PDO::PARAM_STR);
-        $query->bindValue(':poster'     ,$this->poster, PDO::PARAM_STR);
-        $query->bindValue(':duration'       ,$this->duration, PDO::PARAM_STR);
-        $query->bindValue(':date'        ,$this->date, PDO::PARAM_STR);
-        $query->bindValue(':director_id'    ,$this->director_id, PDO::PARAM_INT);
+        $query->bindValue(':title', $this->title, PDO::PARAM_STR);
+        $query->bindValue(':synopsis', $this->synopsis, PDO::PARAM_STR);
+        $query->bindValue(':poster', $this->poster, PDO::PARAM_STR);
+        $query->bindValue(':duration', $this->duration, PDO::PARAM_STR);
+        $query->bindValue(':date', $this->date, PDO::PARAM_STR);
+        $query->bindValue(':director_id', $this->director_id, PDO::PARAM_INT);
+        $query->bindValue(':genre_id', $this->director_id, PDO::PARAM_INT);
 
         $nbLignesModifiees = $query->execute();
 
@@ -162,6 +168,7 @@ class Movie extends CoreModel
                 duration = :duration,
                 date = :date,
                 director_id = :director_id,
+                genre_id = :genre_id,
                 updated_at = NOW()
                 WHERE id = :id;
         ";
@@ -169,13 +176,14 @@ class Movie extends CoreModel
         $query = $pdo->prepare($sql);
         // Execution de la requête de mise à jour (exec, pas query)
 
-        $query->bindValue(':title'        ,$this->title, PDO::PARAM_STR);
-        $query->bindValue(':synopsis' ,$this->synopsis, PDO::PARAM_STR);
-        $query->bindValue(':poster'     ,$this->poster, PDO::PARAM_STR);
-        $query->bindValue(':duration'       ,$this->duration, PDO::PARAM_STR);
-        $query->bindValue(':date'        ,$this->date, PDO::PARAM_INT);
-        $query->bindValue(':director_id'    ,$this->director_id, PDO::PARAM_INT);
-        $query->bindValue(':id'          ,$this->id);
+        $query->bindValue(':title', $this->title, PDO::PARAM_STR);
+        $query->bindValue(':synopsis', $this->synopsis, PDO::PARAM_STR);
+        $query->bindValue(':poster', $this->poster, PDO::PARAM_STR);
+        $query->bindValue(':duration', $this->duration, PDO::PARAM_STR);
+        $query->bindValue(':date', $this->date, PDO::PARAM_INT);
+        $query->bindValue(':director_id', $this->director_id, PDO::PARAM_INT);
+        $query->bindValue(':genre_id', $this->director_id, PDO::PARAM_INT);
+        $query->bindValue(':id', $this->id);
 
         // execution de la requête SQL
         $nbLignesModifiees = $query->execute();
@@ -200,14 +208,14 @@ class Movie extends CoreModel
         $sql = "DELETE FROM movie WHERE id = :id";
 
         $query = $pdo->prepare($sql);
-        
+
         $query->bindValue(':id', $this->id, PDO::PARAM_INT);
 
         return $query->execute() > 0;
     }
 
 
-    
+
 
     /**
      * Get the value of title
@@ -257,7 +265,7 @@ class Movie extends CoreModel
     public function getPoster()
     {
         // return "https://image.tmdb.org/t/p/original" . $this->poster;
-        return "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/" . $this->poster;        
+        return $this->poster;
     }
 
     /**
@@ -308,5 +316,45 @@ class Movie extends CoreModel
     public function setDate(string $date)
     {
         $this->date = $date;
+    }
+
+    /**
+     * Get the value of date
+     *
+     * @return  string
+     */
+    public function getGenreId()
+    {
+        return $this->genre_id;
+    }
+
+    /**
+     * Set the value of date
+     *
+     * @param  string  $date
+     */
+    public function setGenreId(string $genre_id)
+    {
+        $this->genre_id = $genre_id;
+    }
+
+        /**
+     * Get the value of date
+     *
+     * @return  string
+     */
+    public function getDirectorId()
+    {
+        return $this->director_id;
+    }
+
+    /**
+     * Set the value of date
+     *
+     * @param  string  $date
+     */
+    public function setDirectorId(string $director_id)
+    {
+        $this->director_id = $director_id;
     }
 }

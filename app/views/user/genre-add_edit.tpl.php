@@ -1,5 +1,5 @@
 <div class="container my-4">
-    <a href="<?= $router->generate('genres-list') ?>" class="btn btn-success float-end">Retour</a>
+    <a href="<?= $router->generate('user-genres-list') ?>" class="btn btn-success float-end">Retour</a>
 
     <h2><?= $title ?></h2>
 

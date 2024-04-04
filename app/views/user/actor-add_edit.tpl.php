@@ -1,5 +1,5 @@
 <div class="container my-4">
-    <a href="<?= $router->generate('user-directors-list') ?>" class="btn btn-success float-end">Retour</a>
+    <a href="<?= $router->generate('user-actors-list') ?>" class="btn btn-success float-end">Retour</a>
 
     <h2><?= $title ?></h2>
 
@@ -10,36 +10,30 @@
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>
 
-        <?= $director->getId() ?>
+        <?= $actor->getId() ?>">
 
         <div class="mb-3">
             <label for="firstname" class="form-label">Prénom</label>
             <input type="text" class="form-control" id="firstname" placeholder="Prénom"
-                   name="firstname" value="<?= $director->getFirstname() ?>">
+                   name="firstname" value="<?= $actor->getFirstname() ?>">
         </div>
 
         <div class="mb-3">
             <label for="lastname" class="form-label">Nom</label>
             <input type="text" class="form-control" id="lastname" placeholder="Nom"
-                   name="lastname" value="<?= $director->getLastname() ?>">
+                   name="lastname" value="<?= $actor->getLastname() ?>">
         </div>
 
         <div class="mb-3">
             <label for="poster" class="form-label">Photo</label>
             <input type="text" class="form-control" id="poster" placeholder="Photo"
-                   name="poster" value="<?= $director->getPoster() ?>">
+                   name="poster" value="<?= $actor->getPoster() ?>">
         </div>
 
         <div class="mb-3">
             <label for="year" class="form-label">Naissance</label>
             <input type="text" class="form-control" id="year" placeholder="Année de naissance"
-                   name="year" value="<?= $director->getBirth() ?>">
-        </div>
-
-        <div class="mb-3">
-            <label for="biography" class="form-label">Biographie</label>
-            <input type="text" class="form-control" id="biography" placeholder="Biographie"
-                   name="biography" value="<?= $director->getBiography() ?>">
+                   name="year" value="<?= $actor->getBirth() ?>">
         </div>
 
         <div class="d-grid gap-2">

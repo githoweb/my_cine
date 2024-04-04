@@ -233,57 +233,6 @@ class UserController extends CoreController
         }
     }
 
-/**
-     * Fonction de test password
-     *
-     * @param string $password  le password à tester
-     * @param integer $minLength la longueur min du password (default = 8)
-     * @param boolean $noMinus true si on ne doit pas tester les minuscules
-     * @param boolean $noMajus true si on ne doit pas tester les majuscules
-     * @param boolean $noSpecial true si on ne doit pas tester les cars spéciaux
-     * @param boolean $noNum true si on ne doit pas tester les chiffres
-     * @return void
-     */
-    function testPwd($password, $minLength = 8, $noMinus = false, $noMajus = false, $noSpecial = false, $noNum = false)
-    {
-
-        if (true) {     // Pour executer une seule des deux alternatives (true : regexp, false: algo php)
-            return preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@_$!%*#?&])[A-Za-z\d@$!%_*#?&]{8,}$/", $password);
-        } else {
-
-            if (strlen($password) < $minLength) {
-            // Longueur pas bonne -> erreur
-                return false;
-            }
-
-            // On splite le password cractere par caractere dans un tableau
-            // ou parcours le password caractere par caractere
-            foreach (str_split($password) as $c) {
-                // Test des minuscules
-                // Le 1er test (!noMinus) permet de ne plus faire le strpos si on a deja trouvé
-                // une minuscule
-                if (!$noMinus   && strpos("abcdefghijklmnopqrstuvwxyz", $c) !== false) {
-                    // Le flag $noMinus est mis a true signalant que c'est bon pour les minuscules
-                    $noMinus = true;
-                }
-                // Le 1er test (!noMajus) permet de ne plus faire le strpos si on a deja trouvé
-                // une majuscule
-                if (!$noMajus   && strpos("ABCDEFGHIJKLMNOPQRSTUVWXYZ", $c) !== false) {
-                    // Le flag $noMajus est mis a true signalant que c'est bon pour les majuscules
-                    $noMajus = true;
-                }
-                if (!$noSpecial && strpos("_-|%&*=@$]", $c) !== false) {
-                    $noSpecial = true;
-                }
-                if (!$noNum     && strpos("0123456789", $c) !== false) {
-                    $noNum = true;
-                }
-            }
-            // pour retourner 'true', il faut que les 4 flags soient egalement à true
-            return $noMinus && $noMajus && $noSpecial && $noNum;
-        }
-    }
-
     public function delete($id)
     {
         $user = AppUser::find($id);
@@ -301,34 +250,12 @@ class UserController extends CoreController
         }
     }
 
+
+    /* --- MOVIES --- */
     public function moviesList()
     {
          $this->show('user/movies_list', [
             'movies' => Movie::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function actorsList()
-    {
-         $this->show('user/actors_list', [
-            'actors' => Actor::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function directorsList()
-    {
-         $this->show('user/directors_list', [
-            'directors' => Director::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function genresList()
-    {
-         $this->show('user/genres_list', [
-            'genres' => Genre::findAll(),
             'tokenCsrf' => self::setCsrf()
         ]);
     }
@@ -342,7 +269,6 @@ class UserController extends CoreController
         ]);
     }
 
-    
     public function addMoviePost()
     {
 
@@ -404,9 +330,19 @@ class UserController extends CoreController
         }
     }
 
+
+    /* --- ACTORS --- */
+    public function actorsList()
+    {
+         $this->show('user/actors_list', [
+            'actors' => Actor::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
     public function addActor()
     {
-        $this->show('user/add-actor_edit', [
+        $this->show('user/actor-add_edit', [
             'title' => "Ajouter un Acteur",
             'actor'  => new Actor(),
             'tokenCsrf' => self::setCsrf()
@@ -461,7 +397,7 @@ class UserController extends CoreController
             header("Location: /user/actors-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add-actor_edit', [
+            $this->show('user/actor-add_edit', [
                 'title' => "Ajouter un acteur",
                 'actor'  => $actor,
                 'errors' => $tabErreurs,
@@ -470,9 +406,19 @@ class UserController extends CoreController
         }
     }
 
+
+    /* --- DIRECTORS --- */
+    public function directorsList()
+    {
+         $this->show('user/directors_list', [
+            'directors' => Director::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
     public function addDirector()
     {
-        $this->show('user/add-director_edit', [
+        $this->show('user/director-add_edit', [
             'title' => "Ajouter un Réalisateur",
             'director'  => new Director(),
             'tokenCsrf' => self::setCsrf()
@@ -521,7 +467,7 @@ class UserController extends CoreController
             header("Location: /user/directors-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add-director_edit', [
+            $this->show('user/director-add_edit', [
                 'title' => "Ajouter un utilisateur",
                 'director'  => $director,
                 'errors' => $tabErreurs,
@@ -530,9 +476,18 @@ class UserController extends CoreController
         }
     }
 
+        /* --- GENRES --- */
+    public function genresList()
+    {
+         $this->show('user/genres_list', [
+            'genres' => Genre::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+
     public function addGenre()
     {
-        $this->show('user/add-genre_edit', [
+        $this->show('user/genre-add_edit', [
             'title' => "Ajouter un genre",
             'genre'  => new Genre(),
             'tokenCsrf' => self::setCsrf()
@@ -567,7 +522,7 @@ class UserController extends CoreController
             header("Location: /user/genres-list");
         } else {
             // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add-genre_edit', [
+            $this->show('user/genre-add_edit', [
                 'title' => "Ajouter un genre",
                 'genre'  => $genre,
                 'errors' => $tabErreurs,
@@ -577,4 +532,59 @@ class UserController extends CoreController
     }
 
 
+
+
+
+    /* --- --- */
+
+    /**
+     * Fonction de test password
+     *
+     * @param string $password  le password à tester
+     * @param integer $minLength la longueur min du password (default = 8)
+     * @param boolean $noMinus true si on ne doit pas tester les minuscules
+     * @param boolean $noMajus true si on ne doit pas tester les majuscules
+     * @param boolean $noSpecial true si on ne doit pas tester les cars spéciaux
+     * @param boolean $noNum true si on ne doit pas tester les chiffres
+     * @return void
+     */
+    function testPwd($password, $minLength = 8, $noMinus = false, $noMajus = false, $noSpecial = false, $noNum = false)
+    {
+
+        if (true) {     // Pour executer une seule des deux alternatives (true : regexp, false: algo php)
+            return preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@_$!%*#?&])[A-Za-z\d@$!%_*#?&]{8,}$/", $password);
+        } else {
+
+            if (strlen($password) < $minLength) {
+            // Longueur pas bonne -> erreur
+                return false;
+            }
+
+            // On splite le password cractere par caractere dans un tableau
+            // ou parcours le password caractere par caractere
+            foreach (str_split($password) as $c) {
+                // Test des minuscules
+                // Le 1er test (!noMinus) permet de ne plus faire le strpos si on a deja trouvé
+                // une minuscule
+                if (!$noMinus   && strpos("abcdefghijklmnopqrstuvwxyz", $c) !== false) {
+                    // Le flag $noMinus est mis a true signalant que c'est bon pour les minuscules
+                    $noMinus = true;
+                }
+                // Le 1er test (!noMajus) permet de ne plus faire le strpos si on a deja trouvé
+                // une majuscule
+                if (!$noMajus   && strpos("ABCDEFGHIJKLMNOPQRSTUVWXYZ", $c) !== false) {
+                    // Le flag $noMajus est mis a true signalant que c'est bon pour les majuscules
+                    $noMajus = true;
+                }
+                if (!$noSpecial && strpos("_-|%&*=@$]", $c) !== false) {
+                    $noSpecial = true;
+                }
+                if (!$noNum     && strpos("0123456789", $c) !== false) {
+                    $noNum = true;
+                }
+            }
+            // pour retourner 'true', il faut que les 4 flags soient egalement à true
+            return $noMinus && $noMajus && $noSpecial && $noNum;
+        }
+    }
 }

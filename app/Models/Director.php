@@ -212,7 +212,7 @@ class Director extends CoreModel
      */
     public function getPoster()
     {
-        return "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/" . $this->poster;
+        return $this->poster;
     }
 
     /**

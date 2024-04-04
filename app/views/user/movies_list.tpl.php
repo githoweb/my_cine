@@ -1,5 +1,5 @@
 <div class="container my-4">
-    <a href="<?= $router->generate('user-movie-add') ?>" class="btn btn-success float-end">Ajouter</a>
+    <a href="<?= $router->generate('movie-add') ?>" class="btn btn-success float-end">Ajouter</a>
     <h2>Liste des Films</h2>
     <table class="table table-hover mt-4">
         <thead>

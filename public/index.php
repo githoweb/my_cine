@@ -12,6 +12,7 @@ use App\Controllers\MainController;
 use App\Controllers\MovieController;
 use App\Controllers\ActorController;
 use App\Controllers\DirectorController;
+use App\Controllers\GenreController;
 use App\Controllers\UserController;
 
 require_once '../vendor/autoload.php';
@@ -228,7 +229,7 @@ $router->map(
         'controller' => UserController::class,
         // 'acl' => ["admin"]
     ],
-    'user-movie-add'
+    'movie-add'
 );
 
 // Ajout d'un utilisateur (route post)
