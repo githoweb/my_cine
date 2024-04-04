@@ -1,40 +1,40 @@
-<div class="container my-4">
-    <a href="<?= $router->generate('user-list') ?>" class="btn btn-success float-end">Retour</a>
+<div>
+    <a href="<?= $router->generate('user-list') ?>" class="btn btn-success">Retour</a>
 
     <h2><?= $title ?></h2>
 
-    <form action="" method="POST" class="mt-5">
+    <form action="" method="POST">
         <input type="hidden" name="tokenCsrf" value="<?= $tokenCsrf ?>">
         <?php 
             // Affichage des erreurs
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>
 
-        <div class="mb-3">
-            <label for="firstname" class="form-label">Prénom</label>
+        <div>
+            <label for="firstname">Prénom</label>
             <input type="text" class="form-control" id="firstname" placeholder="Prénom de l'utilisateur"
                    name="firstname" value="<?= $user->getFirstName() ?>">
         </div>
 
-        <div class="mb-3">
-            <label for="lastname" class="form-label">Nom</label>
+        <div>
+            <label for="lastname">Nom</label>
             <input type="text" class="form-control" id="lastname" placeholder="Nom de l'utilisateur"
                    name="lastname" value="<?= $user->getLastName() ?>">
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+        <div>
+            <label for="email">Email</label>
             <input type="text" class="form-control" id="email" placeholder="Adresse mail de l'utilisateur"
                    name="email" value="<?= $user->getEmail() ?>">
         </div>
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Mot de passe</label>
+        <div>
+            <label for="password">Mot de passe</label>
             <input type="password" class="form-control" id="password" placeholder="Mot de passe de l'utilisateur"
                    name="password" value="">
         </div>
 
-        <div class="mb-3">
+        <div>
             <label for="category">Role de l'utilisateur</label>
             <select name="role"
                 class="form-control" id="role" aria-describedby="roleHelpBlock">

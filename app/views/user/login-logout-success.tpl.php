@@ -1,4 +1,4 @@
-<div class="container my-4">
+<div>
 
     <h2>Bonjour <?= $user->getFirstName() ?> <?= $user->getLastName() ?></h2>
 

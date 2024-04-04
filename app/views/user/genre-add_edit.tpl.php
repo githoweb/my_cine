@@ -1,17 +1,17 @@
-<div class="container my-4">
-    <a href="<?= $router->generate('user-genres-list') ?>" class="btn btn-success float-end">Retour</a>
+<div>
+    <a href="<?= $router->generate('user-genres-list') ?>" class="btn btn-success">Retour</a>
 
     <h2><?= $title ?></h2>
 
-    <form action="" method="POST" class="mt-5">
+    <form action="" method="POST">
         <input type="hidden" name="tokenCsrf" value="<?= $tokenCsrf ?>">
         <?php 
             // Affichage des erreurs
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>
 
-        <div class="mb-3">
-            <label for="firstnamename" class="form-label">Nom</label>
+        <div>
+            <label for="firstnamename">Nom</label>
             <input type="text" class="form-control" id="name" placeholder="Nom du genre"
                    name="name" value="<?= $genre->getName() ?>">
         </div>
