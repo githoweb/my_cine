@@ -46,12 +46,10 @@ class UserController extends CoreController
             ]);
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            // Sinon c'est forcément un 'POST' -> traitement des données du form
-
-            // Initialisation d'un tableau d'erreur
             $tabErreurs = [];
 
             // Récupération des données de formulaire (contenues dans $_POST)
+            
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
             $password = filter_input(INPUT_POST, 'password');
 
@@ -68,20 +66,15 @@ class UserController extends CoreController
             $user = AppUser::findUserByEmail($email);
 
             if ($user === false) {
-                // L'utilisateur n'existe pas dans la base
                 $tabErreurs[] = "Cette adresse email n'existe pas";
             } else {
-                // On vérifie le password
-
                 if (password_verify($password, $user->getPassword()) === false) {
-                    // Le password n'est pas bon -> erreur
                     $tabErreurs[] = "Le mot de passe n'est pas le bon";
                 }
             }
 
             if (count($tabErreurs) > 0) {
                 // Il y a des erreurs, on réaffiche le formulaire
-                // avec l'@mail saisie
                 $this->show('user/login', [
                     'userEmail' => $email,
                     'errors' => $tabErreurs

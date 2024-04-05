@@ -10,34 +10,34 @@
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>
 
-        <div>
+        <div class="formItem">
             <label for="firstname">Prénom</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Prénom de l'utilisateur"
+            <input type="text" id="firstname" placeholder="Prénom de l'utilisateur"
                    name="firstname" value="<?= $user->getFirstName() ?>">
         </div>
 
-        <div>
+        <div class="formItem">
             <label for="lastname">Nom</label>
-            <input type="text" class="form-control" id="lastname" placeholder="Nom de l'utilisateur"
+            <input type="text" id="lastname" placeholder="Nom de l'utilisateur"
                    name="lastname" value="<?= $user->getLastName() ?>">
         </div>
 
-        <div>
+        <div class="formItem">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" placeholder="Adresse mail de l'utilisateur"
+            <input type="text" id="email" placeholder="Adresse mail de l'utilisateur"
                    name="email" value="<?= $user->getEmail() ?>">
         </div>
 
-        <div>
+        <div class="formItem">
             <label for="password">Mot de passe</label>
-            <input type="password" class="form-control" id="password" placeholder="Mot de passe de l'utilisateur"
+            <input type="password" id="password" placeholder="Mot de passe de l'utilisateur"
                    name="password" value="">
         </div>
 
-        <div>
+        <div class="formItem">
             <label for="category">Role de l'utilisateur</label>
             <select name="role"
-                class="form-control" id="role" aria-describedby="roleHelpBlock">
+                id="role" aria-describedby="roleHelpBlock">
                 <option value="admin"<?= $user->getRole() === "admin" ? " selected" : "" ?>>Admin</option>
                 <option value="catalog-manager"<?= $user->getRole() == "catalog-manager" ? " selected" : "" ?>>Gestionnaire de catalogue</option>
             </select>
@@ -46,7 +46,7 @@
             </small>
         </div>
 
-        <div class="d-grid gap-2">
+        <div class="action">
             <button type="submit" class="btn btn-primary mt-5">Valider</button>
         </div>
 

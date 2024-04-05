@@ -1,7 +1,7 @@
 <div>
     <a href="<?= $router->generate('movie-add') ?>" class="btn btn-success">Ajouter</a>
     <h2>Liste des Films</h2>
-
+    
     <div class="personsList">
 
         <?php foreach($movies as $movie) : ?>

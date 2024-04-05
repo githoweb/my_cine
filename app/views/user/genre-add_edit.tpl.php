@@ -10,13 +10,13 @@
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>
 
-        <div>
+        <div class="formItem">
             <label for="firstnamename">Nom</label>
-            <input type="text" class="form-control" id="name" placeholder="Nom du genre"
+            <input type="text" id="name" placeholder="Nom du genre"
                    name="name" value="<?= $genre->getName() ?>">
         </div>
 
-        <div class="d-grid gap-2">
+        <div class="action">
             <button type="submit" class="btn btn-primary mt-5">Valider</button>
         </div>
 

@@ -55,7 +55,6 @@ class Movie extends CoreModel
 
     public static function findAllFiltered($year = "all", $genre_id = "all", $director_id = "all", $actor_id = "all")
     {
-
         $pdo = Database::getPDO();
 
         $conditions = [];
@@ -66,7 +65,6 @@ class Movie extends CoreModel
         if ($genre_id != "all") {
             $conditions[] = "genre_id = " . $genre_id;
         }
-
         if ($director_id !== "all") {
             $conditions[] = "director_id = " . $director_id;
         }

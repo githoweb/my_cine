@@ -12,35 +12,35 @@
 
         <div>
             <label for="title">Titre</label>
-            <input type="text" class="form-control" id="title" placeholder="Titre" name="title" value="<?= $movie->getTitle() ?>">
+            <input type="text" id="title" placeholder="Titre" name="title" value="<?= $movie->getTitle() ?>">
         </div>
 
         <div>
             <label for="poster">Affiche</label>
-            <input type="text" class="form-control" id="poster" placeholder="Affiche" name="poster" value="<?= $movie->getPoster() ?>">
+            <input type="text" id="poster" placeholder="Affiche" name="poster" value="<?= $movie->getPoster() ?>">
         </div>
 
         <div>
             <label for="duration">Durée</label>
-            <input type="text" class="form-control" id="duration" placeholder="Durée" name="duration" value="<?= $movie->getDuration() ?>">
+            <input type="text" id="duration" placeholder="Durée" name="duration" value="<?= $movie->getDuration() ?>">
         </div>
 
         <div>
             <label for="year">Date</label>
-            <input type="text" class="form-control" id="year" placeholder="year" name="year" value="<?= $movie->getDate() ?>">
+            <input type="text" id="year" placeholder="year" name="year" value="<?= $movie->getDate() ?>">
         </div>
 
         <div>
             <label for="genre_id">Genre</label>
-            <input type="text" class="form-control" id="genre_id" placeholder="Genre" name="genre_id" value="<?= $movie->getGenreId() ?>">
+            <input type="text" id="genre_id" placeholder="Genre" name="genre_id" value="<?= $movie->getGenreId() ?>">
         </div>
 
         <div>
             <label for="director_id">Réalisateur</label>
-            <input type="text" class="form-control" id="director_id" placeholder="Réalisateur" name="director_id" value="<?= $movie->getDirectorId() ?>">
+            <input type="text" id="director_id" placeholder="Réalisateur" name="director_id" value="<?= $movie->getDirectorId() ?>">
         </div>
 
-        <div class="d-grid gap-2">
+        <div class="action">
             <button type="submit" class="btn btn-primary mt-5">Valider</button>
         </div>
 
