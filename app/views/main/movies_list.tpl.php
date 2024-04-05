@@ -2,7 +2,7 @@
 
 <form method="get" action="<?= $router->generate('movies-list') ?>">
 
-Filtrer par :
+<p>Filtrer par :</p>
 
 <fieldset>
   <select name="genre_id">
@@ -43,11 +43,30 @@ Filtrer par :
 
 </fieldset>
 
-  
-
 </form>
 
 <?php foreach ($movies as $movie) : ?>
+
+<?php
+    // $type = gettype($movie->getDirectorId());
+    // echo "Le type de la variable \$var est : $type";
+
+    // $movie->getDirectorId() renvoie une string : il faut la convertir en integer
+    $idToFind = intval($movie->getDirectorId());
+    dump($idToFind);
+
+    $filteredDirectors = array_filter($directors, function($object) use ($idToFind) {
+      return $object->getId() === $idToFind;
+    });
+    // retourne un tableau d'objets filtrés ou, s'il n'y a pas de résultats : false
+
+    if($filteredDirectors !== false){
+      $thisMovieDirector = reset($filteredDirectors);    
+    } else {
+      // dans le cas où le filtrage renvoie false
+      $thisMovieDirector = '';    
+    }
+  ?>
 
   <div class="card">
 
@@ -56,9 +75,11 @@ Filtrer par :
     </div>
     <div class="card-data">
       <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>
-      <div class="card-item">
-        <p><?= $movie->getSynopsis() ?></p>
-      </div>
+      <ul class="card-item">
+        <li>Réalisateur : <?= gettype($thisMovieDirector) !== 'boolean' ? $thisMovieDirector->getFirstname(): '' ?> <?= gettype($thisMovieDirector) !== 'boolean' ? $thisMovieDirector->getLastname(): '' ?></li>
+        <li>Durée : <?= $movie->getDuration() ?>mn
+      </ul>
+      <p><?= $movie->getSynopsis() ?></p>
     </div>
   </div>
 
