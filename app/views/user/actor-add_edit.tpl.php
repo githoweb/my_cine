@@ -4,13 +4,13 @@
     <h2><?= $title ?></h2>
 
     <form action="" method="POST">
-        <input type="hidden" name="tokenCsrf" value="<?= $tokenCsrf ?>">
         <?php 
+            include __DIR__ . '/../partials/csrf.tpl.php';
             // Affichage des erreurs
-            include __DIR__ . '/../partials/errors.tpl.php'
+            include __DIR__ . '/../partials/errors.tpl.php';
         ?>
 
-        <?= $actor->getId() ?>">
+        <?= $actor->getId() ?>
 
         <div class="formItem">
             <label for="firstname">Prénom</label>
@@ -31,9 +31,14 @@
         </div>
 
         <div class="formItem">
-            <label for="year">Naissance</label>
-            <input type="text" id="year" placeholder="Année de naissance"
-                   name="year" value="<?= $actor->getBirth() ?>">
+            <label for="birth">Naissance</label>
+            <input type="text" id="birth" placeholder="Année de naissance"
+                   name="birth" value="<?= $actor->getBirth() ?>">
+        </div>
+
+        <div class="formItem">
+            <label for="biography">Biographie</label>
+            <input type="text" id="biography" placeholder="Biographie" name="biography" value="<?= $actor->getBiography() ?>">
         </div>
 
         <div class="action">

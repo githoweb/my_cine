@@ -3,7 +3,7 @@
     <a href="<?= $router->generate('movies-list') ?>" title="Films">Affichage Front Office</a>
   </li>
   <li>
-    <a href="<?= $router->generate('user-list') ?>">Liste de Users</a>
+    <a href="<?= $router->generate('users-list') ?>">Liste de Users</a>
   </li>
   <li>
     <a href="<?= $router->generate('user-movies-list') ?>">Liste de Films</a>

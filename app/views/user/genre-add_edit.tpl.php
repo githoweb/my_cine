@@ -4,8 +4,8 @@
     <h2><?= $title ?></h2>
 
     <form action="" method="POST">
-        <input type="hidden" name="tokenCsrf" value="<?= $tokenCsrf ?>">
         <?php 
+            include __DIR__ . '/../partials/csrf.tpl.php';
             // Affichage des erreurs
             include __DIR__ . '/../partials/errors.tpl.php'
         ?>

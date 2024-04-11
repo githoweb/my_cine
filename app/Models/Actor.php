@@ -41,6 +41,17 @@ class Actor extends CoreModel
     public static function find($actorId)
     {
         $pdo = Database::getPDO();
+
+        $sql = '
+            SELECT *
+            FROM actor
+            WHERE id = ' . $actorId;
+
+        $pdoStatement = $pdo->query($sql);
+
+        $result = $pdoStatement->fetchObject('App\Models\Actor');
+
+        return $result;
     }
 
     public static function findAll()
@@ -128,6 +139,7 @@ class Actor extends CoreModel
 
         return $query->execute() > 0;
     }
+    
     
 
     /**

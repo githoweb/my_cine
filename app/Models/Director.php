@@ -29,14 +29,14 @@ class Director extends CoreModel
      */
     private $biography;
 
-    public static function find($genreId)
+    public static function find($directorId)
     {
         $pdo = Database::getPDO();
 
         $sql = '
             SELECT *
             FROM director
-            WHERE id = ' . $genreId;
+            WHERE id = ' . $directorId;
 
         $pdoStatement = $pdo->query($sql);
 

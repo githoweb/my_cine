@@ -3,26 +3,10 @@
 namespace App\Controllers;
 
 use App\Models\AppUser;
-use App\Models\Movie;
-use App\Models\Actor;
-use App\Models\Director;
-use App\Models\Genre;
-use App\Utils\Database;
 
 class UserController extends CoreController
 {
-    /**
-     * affiche le formulaire de login
-     *
-     * @return void
-     */
-    public function login()
-    {
-        $this->show('user/login', [
-            'userEmail' => ''
-        ]);
-    }
-
+    
     /**
      * traite les données POST recues après soumission du formulaire de login
      *
@@ -125,9 +109,9 @@ class UserController extends CoreController
      *
      * @return void
      */
-    public function list()
+    public function usersList()
     {
-         $this->show('user/list', [
+         $this->show('user/users_list', [
             'users' => AppUser::findAll(),
             'tokenCsrf' => self::setCsrf()
         ]);
@@ -138,16 +122,16 @@ class UserController extends CoreController
      *
      * @return void
      */
-    public function add()
+    public function addUser()
     {
-        $this->show('user/add_edit', [
+        $this->show('user/user-add_edit', [
             'title' => "Ajouter un utilisateur",
             'user'  => new AppUser(),
             'tokenCsrf' => self::setCsrf()
         ]);
     }
 
-    public function addPost()
+    public function addUserPost()
     {
 
         $tabErreurs = [];
@@ -202,10 +186,10 @@ class UserController extends CoreController
         }
 
         if (count($tabErreurs) === 0) {
-            header("Location: /user/list");
+            header("Location: /user/users-list");
         } else {
             // Il y a des erreurs -> affichage du formulaire avec les données saisies
-            $this->show('user/add_edit', [
+            $this->show('user/user-add_edit', [
                 'title' => "Ajouter un utilisateur",
                 'user'  => $user,
                 'errors' => $tabErreurs,
@@ -214,7 +198,7 @@ class UserController extends CoreController
         }
     }
 
-    public function delete($id)
+    public function deleteUser($id)
     {
         $user = AppUser::find($id);
 
@@ -223,294 +207,18 @@ class UserController extends CoreController
 
         $tokenCsrf = filter_input(INPUT_GET, 'tokenCsrf');
 
+        
+
+
         if ($user == null || $user === false || !self::checkCsrf($tokenCsrf)) {
             header('HTTP/1.0 404 Not Found');
         } else {
             $user->delete();
-            header("Location: /user/list");
+            header("Location: /user/users-list");
         }
     }
 
 
-    /* --- MOVIES --- */
-    public function moviesList()
-    {
-         $this->show('user/movies_list', [
-            'movies' => Movie::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addMovie()
-    {
-        $this->show('user/movie-add_edit', [
-            'title' => "Ajouter un film",
-            'movie'  => new Movie(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addMoviePost()
-    {
-
-        $tabErreurs = [];
-        $title = filter_input(INPUT_POST, 'title');
-        $poster  = filter_input(INPUT_POST, 'poster');
-        $duration  = filter_input(INPUT_POST, 'duration');
-        $date      = filter_input(INPUT_POST, 'date');
-        $synopsis      = filter_input(INPUT_POST, 'synopsis');
-        $genre_id      = filter_input(INPUT_POST, 'genre_id');
-        $director_id      = filter_input(INPUT_POST, 'director_id');
-        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
-
-        if (!self::checkCsrf($tokenCsrf)) {
-            $tabErreurs[] = "Token inconnu/non recu";
-        }
-
-        if ($title === null || strlen($title) === 0) {
-            $tabErreurs[] = "Le prénom n'est pas correct";
-        }
-        if ($poster === null || strlen($poster) === 0) {
-            $tabErreurs[] = "Le nom n'est pas correct";
-        }
-        if ($duration === null || strlen($duration) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-        if ($date === null || strlen($date) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-        if ($synopsis === null || strlen($synopsis) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-        if ($genre_id === null || strlen($genre_id) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-        if ($director_id === null || strlen($director_id) === 0) {
-            $tabErreurs[] = "L'email n'est pas correct";
-        }
-
-        $movie = new Movie();
-        $movie->setTitle($title);
-        $movie->setPoster($poster);
-        $movie->setDuration($duration);
-        $movie->setDate($date);
-        $movie->setSynopsis($synopsis);
-        $movie->setGenreId($genre_id);
-        $movie->setDirectorId($director_id);
-
-        if (count($tabErreurs) === 0) {
-            header("Location: /user/movies-list");
-        } else {
-            // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/add-movie_edit', [
-                'title' => "Ajouter un film",
-                'movie'  => $movie,
-                'errors' => $tabErreurs,
-                'tokenCsrf' => Self::setCsrf()
-            ]);
-        }
-    }
-
-
-    /* --- ACTORS --- */
-    public function actorsList()
-    {
-         $this->show('user/actors_list', [
-            'actors' => Actor::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addActor()
-    {
-        $this->show('user/actor-add_edit', [
-            'title' => "Ajouter un Acteur",
-            'actor'  => new Actor(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addActorPost()
-    {
-
-        $tabErreurs = [];
-        $firstname = filter_input(INPUT_POST, 'firstname');
-        $lastname  = filter_input(INPUT_POST, 'lastname');
-        $birth      = filter_input(INPUT_POST, 'birth');
-        $poster      = filter_input(INPUT_POST, 'poster');
-        $biography      = filter_input(INPUT_POST, 'biography');
-        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
-
-        if (!self::checkCsrf($tokenCsrf)) {
-            $tabErreurs[] = "Token inconnu/non recu";
-        }
-
-        if ($firstname === null || strlen($firstname) === 0) {
-            $tabErreurs[] = "Le prénom n'est pas correct";
-        }
-        if ($lastname === null || strlen($lastname) === 0) {
-            $tabErreurs[] = "Le nom n'est pas correct";
-        }
-        if ($birth === null || strlen($birth) === 0) {
-            $tabErreurs[] = "La date de naissance n'est pas correcte";
-        }
-        if ($poster === null || strlen($poster) === 0) {
-            $tabErreurs[] = "L'image n'est pas correct";
-        }
-        if ($biography === null || strlen($biography) === 0) {
-            $tabErreurs[] = "La biographie n'est pas correcte";
-        }
-
-        $actor = new Actor();
-        $actor->setFirstname($firstname);
-        $actor->setLastname($lastname);
-        $birth->setBirth($birth);
-        $poster->setPassword($poster);
-        $biography->setBiography($biography);
-
-        if (count($tabErreurs) === 0) {
-            if ($actor->save() === false) {
-                $tabErreurs[] = "Echec de la sauvegarde";
-            };
-        }
-
-        if (count($tabErreurs) === 0) {
-            header("Location: /user/actors-list");
-        } else {
-            // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/actor-add_edit', [
-                'title' => "Ajouter un acteur",
-                'actor'  => $actor,
-                'errors' => $tabErreurs,
-                'tokenCsrf' => Self::setCsrf()
-            ]);
-        }
-    }
-
-
-    /* --- DIRECTORS --- */
-    public function directorsList()
-    {
-         $this->show('user/directors_list', [
-            'directors' => Director::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addDirector()
-    {
-        $this->show('user/director-add_edit', [
-            'title' => "Ajouter un Réalisateur",
-            'director'  => new Director(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addDirectorPost()
-    {
-
-        $tabErreurs = [];
-        $firstname = filter_input(INPUT_POST, 'firstname');
-        $lastname  = filter_input(INPUT_POST, 'lastname');
-        $birth      = filter_input(INPUT_POST, 'birth');
-        $poster      = filter_input(INPUT_POST, 'poster');
-        $biography      = filter_input(INPUT_POST, 'biography');
-        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
-
-        if (!self::checkCsrf($tokenCsrf)) {
-            $tabErreurs[] = "Token inconnu/non recu";
-        }
-
-        if ($firstname === null || strlen($firstname) === 0) {
-            $tabErreurs[] = "Le prénom n'est pas correct";
-        }
-        if ($lastname === null || strlen($lastname) === 0) {
-            $tabErreurs[] = "Le nom n'est pas correct";
-        }
-        if ($birth === null || strlen($birth) === 0) {
-            $tabErreurs[] = "La date de naissance n'est pas correcte";
-        }
-        if ($poster === null || strlen($poster) === 0) {
-            $tabErreurs[] = "L'image n'est pas correct";
-        }
-        if ($biography === null || strlen($biography) === 0) {
-            $tabErreurs[] = "La biographie n'est pas correcte";
-        }
-
-        $director = new Director();
-        $director->setFirstName($firstname);
-        $director->setLastName($lastname);
-        $director->setBirth($birth);
-        $director->setPoster($poster);
-        $director->setBiography($biography);
-
-        if (count($tabErreurs) === 0) {
-            header("Location: /user/directors-list");
-        } else {
-            // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/director-add_edit', [
-                'title' => "Ajouter un utilisateur",
-                'director'  => $director,
-                'errors' => $tabErreurs,
-                'tokenCsrf' => Self::setCsrf()
-            ]);
-        }
-    }
-
-        /* --- GENRES --- */
-    public function genresList()
-    {
-         $this->show('user/genres_list', [
-            'genres' => Genre::findAll(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addGenre()
-    {
-        $this->show('user/genre-add_edit', [
-            'title' => "Ajouter un genre",
-            'genre'  => new Genre(),
-            'tokenCsrf' => self::setCsrf()
-        ]);
-    }
-
-    public function addGenrePost()
-    {
-
-        $tabErreurs = [];
-        $name = filter_input(INPUT_POST, 'name');
-        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
-
-        if (!self::checkCsrf($tokenCsrf)) {
-            $tabErreurs[] = "Token inconnu/non recu";
-        }
-
-        if ($name === null || strlen($name) === 0) {
-            $tabErreurs[] = "Le nom n'est pas correct";
-        }
-
-        $genre = new Genre();
-        $genre->setName($name);
-
-        if (count($tabErreurs) === 0) {
-            if ($genre->save() === false) {
-                $tabErreurs[] = "Echec de la sauvegarde";
-            };
-        }
-
-        if (count($tabErreurs) === 0) {
-            header("Location: /user/genres-list");
-        } else {
-            // Il y a des erreurs -> affichage du form avec les données saisies
-            $this->show('user/genre-add_edit', [
-                'title' => "Ajouter un genre",
-                'genre'  => $genre,
-                'errors' => $tabErreurs,
-                'tokenCsrf' => Self::setCsrf()
-            ]);
-        }
-    }
 
 
 

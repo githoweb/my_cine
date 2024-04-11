@@ -11,44 +11,90 @@ class DirectorController extends CoreController
      *
      * @return void
      */
-    public function list()
+    public function directorsList()
     {
-        // méthode find déclarée en statique : évite de créer une instance
-        // qui ne servait qu'a accéder à la méthode find
-        $directors = Director::findAll();
+         $this->show('user/directors_list', [
+            'directors' => Director::findAll(),
+            'tokenCsrf' => self::setCsrf()
+        ]);
+    }
+        
 
-        $this->show('main/directors_list', [
-            'directors' => $directors
+    public function addDirector()
+    {
+        $this->show('user/director-add_edit', [
+            'title' => "Ajouter un Réalisateur",
+            'director'  => new Director(),
+            'tokenCsrf' => self::setCsrf()
         ]);
     }
 
-    /**
-     * ajout d'un réalisateur
-     *
-     * @return void
-     */
-    public function add()
+    public function addDirectorPost()
     {
-        $this->show('main/actor_add', [
-            'director' => new Director(),
-            'title'   => 'Ajouter un director',
-        ]);
+
+        $tabErreurs = [];
+        $firstname = filter_input(INPUT_POST, 'firstname');
+        $lastname  = filter_input(INPUT_POST, 'lastname');
+        $birth      = filter_input(INPUT_POST, 'birth');
+        $poster      = filter_input(INPUT_POST, 'poster');
+        $biography      = filter_input(INPUT_POST, 'biography');
+        $tokenCsrf = filter_input(INPUT_POST, 'tokenCsrf');
+
+        if (!self::checkCsrf($tokenCsrf)) {
+            $tabErreurs[] = "Token inconnu/non recu";
+        }
+
+        if ($firstname === null || strlen($firstname) === 0) {
+            $tabErreurs[] = "Le prénom n'est pas correct";
+        }
+        if ($lastname === null || strlen($lastname) === 0) {
+            $tabErreurs[] = "Le nom n'est pas correct";
+        }
+        if ($birth === null || strlen($birth) === 0) {
+            $tabErreurs[] = "La date de naissance n'est pas correcte";
+        }
+        if ($poster === null || strlen($poster) === 0) {
+            $tabErreurs[] = "L'image n'est pas correct";
+        }
+        if ($biography === null || strlen($biography) === 0) {
+            $tabErreurs[] = "La biographie n'est pas correcte";
+        }
+
+        $director = new Director();
+        $director->setFirstname($firstname);
+        $director->setLastname($lastname);
+        $director->setBirth($birth);
+        $director->setPoster($poster);
+        $director->setBiography($biography);
+
+        if (count($tabErreurs) === 0) {
+            $resultDB = $director->save();
+            header("Location: /user/directors-list");
+        } else {
+            // Il y a des erreurs -> affichage du form avec les données saisies
+            $this->show('user/director-add_edit', [
+                'title' => "Ajouter un utilisateur",
+                'director'  => $director,
+                'errors' => $tabErreurs,
+                'tokenCsrf' => Self::setCsrf()
+            ]);
+        }
     }
 
-    /**
-     * Methode pour supprimer un réalisateur
-     *
-     * @return void
-     */
-    public function delete($id)
+    public function deleteDirector($id)
     {
         $director = Director::find($id);
 
-        if ($director == null || $director === false) {
+        // On récupère le token Csrf passé dans la route sous la forme
+        // /movie/delete/id?tokenCsrf=ziuefchieuhefiefzuhezfiuh
+
+        $tokenCsrf = filter_input(INPUT_GET, 'tokenCsrf');
+
+        if ($director == null || $director === false || !self::checkCsrf($tokenCsrf)) {
             header('HTTP/1.0 404 Not Found');
         } else {
             $director->delete();
-            header("Location: /directors_list");
+            header("Location: /user/directors-list");
         }
     }
 

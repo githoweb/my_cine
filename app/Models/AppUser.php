@@ -127,8 +127,8 @@ class AppUser extends CoreModel
     $query->execute([
       ':email'     => $this->getEmail(),
       ':password'  => $this->getPassword(),
-      ':firstname' => $this->getFirstName(),
-      ':lastname'  => $this->getLastName(),
+      ':firstname' => $this->getFirstname(),
+      ':lastname'  => $this->getLastname(),
       ':role'      => $this->getRole(),
     ]);
 
@@ -165,8 +165,8 @@ class AppUser extends CoreModel
     $query->execute([
       ':email'     => $this->getEmail(),
       ':password'  => $this->getPassword(),
-      ':firstname' => $this->getFirstName(),
-      ':lastname'  => $this->getLastName(),
+      ':firstname' => $this->getFirstname(),
+      ':lastname'  => $this->getLastname(),
       ':role'      => $this->getRole(),
       ':id'        => $this->getId()
     ]);
@@ -267,49 +267,49 @@ class AppUser extends CoreModel
   }
 
   /**
-   * Get the value of lastName
+   * Get the value of lastname
    *
    * @return  string
    */
-  public function getLastName()
+  public function getLastname()
   {
     return $this->lastname;
   }
 
   /**
-   * Set the value of lastName
+   * Set the value of lastname
    *
-   * @param  string  $lastName
+   * @param  string  $lastname
    *
    * @return  self
    */
-  public function setLastName(string $lastName)
+  public function setLastname(string $lastname)
   {
-    $this->lastname = $lastName;
+    $this->lastname = $lastname;
 
     return $this;
   }
 
   /**
-   * Get the value of firstName
+   * Get the value of firstname
    *
    * @return  string
    */
-  public function getFirstName()
+  public function getFirstname()
   {
     return $this->firstname;
   }
 
   /**
-   * Set the value of firstName
+   * Set the value of firstname
    *
-   * @param  string  $firstName
+   * @param  string  $firstname
    *
    * @return  self
    */
-  public function setFirstName(string $firstName)
+  public function setFirstname(string $firstname)
   {
-    $this->firstname = $firstName;
+    $this->firstname = $firstname;
 
     return $this;
   }

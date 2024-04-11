@@ -145,9 +145,8 @@ fieldset button {
   z-index: 1;
   left: 0;
   right: 0;
-  top: 100%;
-  bottom: 20px;
-  height: 1rem;
+  bottom: 0;
+  height: calc(20px + 0.5rem);
   text-align: center;
   background: #693;
   padding: 0.5rem 0.5rem;

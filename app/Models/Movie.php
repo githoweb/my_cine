@@ -115,7 +115,7 @@ class Movie extends CoreModel
         $pdo = Database::getPDO();
 
         $sql = "INSERT INTO movie (title, synopsis, poster, duration, date, director_id, genre_id)
-                VALUES (:title, :description, :poster, :duration, :date, :director_id, :genre_id)";
+                VALUES (:title, :synopsis, :poster, :duration, :date, :director_id, :genre_id)";
 
         $query = $pdo->prepare($sql);
 
@@ -129,7 +129,6 @@ class Movie extends CoreModel
 
         $nbLignesModifiees = $query->execute();
 
-        // Je teste que exec a bien ajouté 1 ligne 
         if ($nbLignesModifiees > 0) {
             // Récupération de la valeur de l'id généré par la database
             // et mise à jour du champ id de l'instance courante

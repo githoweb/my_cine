@@ -53,12 +53,15 @@ $router->map(
     'GET',
     '/',
     [
-        'method' => 'home',
-        'controller' => MainController::class,
+        'method' => 'list',
+        'controller' => MovieController::class,
         // 'acl' => ["admin"]
     ],
     'main-home'
 );
+
+
+/* --- Movies --- */
 
 $router->map(
     'GET',
@@ -87,21 +90,107 @@ $router->map(
     '/movie/[i:id]',
     [
         'method' => 'movieDetail',
-        'controller' => MovieController::class
+        'controller' => MovieController::class,
+                // 'acl' => ["admin"]
     ],
     'movie-detail'
 );
 
 $router->map(
     'GET',
-    '/actor/list',
+    '/user/movies-list',
     [
-        'method' => 'list',
-        'controller' => ActorController::class,
-        // 'acl' => ["admin"]
+        'method' => 'moviesList',
+        'controller' => MovieController::class,
+        'acl' => ["admin"] 
     ],
-    'actors-list'
+    'user-movies-list'
 );
+
+$router->map(
+    'GET',
+    '/user/movie-add',
+    [
+        'method' => 'addMovie',
+        'controller' => MovieController::class,
+        'acl' => ["admin"]
+    ],
+    'movie-add'
+);
+
+$router->map(
+    'POST',
+    '/user/movie-add',
+    [
+        'method' => 'addMoviePost',
+        'controller' => MovieController::class,
+        'acl' => ["admin"]
+    ],
+    'movie-add-post'
+);
+
+$router->map(
+    'GET',
+    '/movie/delete/[i:id]',
+    [
+        'method' => 'deleteMovie',
+        'controller' => MovieController::class,
+        'acl' => ["admin"]
+    ],
+    'movie-delete'
+);
+
+
+/* --- Actors --- */
+
+$router->map(
+    'GET',
+    '/user/actors-list',
+    [
+        'method' => 'actorsList',
+        'controller' => ActorController::class,
+        'acl' => ["admin"] 
+    ],
+    'user-actors-list'
+);
+
+
+$router->map(
+    'GET',
+    '/user/actor-add',
+    [
+        'method' => 'addActor',
+        'controller' => ActorController::class,
+        'acl' => ["admin"]
+    ],
+    'actor-add'
+);
+
+$router->map(
+    'POST',
+    '/user/actor-add',
+    [
+        'method' => 'addActorPost',
+        'controller' => ActorController::class,
+        'acl' => ["admin"]
+    ],
+    'add-actor-post'
+);
+
+$router->map(
+    'GET',
+    '/actor/delete/[i:id]',
+    [
+        'method' => 'deleteActor',
+        'controller' => ActorController::class,
+        'acl' => ["admin"]
+    ],
+    'actor-delete'
+);
+
+
+
+/* --- Directors --- */
 
 $router->map(
     'GET',
@@ -109,11 +198,103 @@ $router->map(
     [
         'method' => 'list',
         'controller' => DirectorController::class,
-        // 'acl' => ["admin"]
+        'acl' => ["admin"]
     ],
     'directors-list'
 );
 
+$router->map(
+    'GET',
+    '/user/directors-list',
+    [
+        'method' => 'directorsList',
+        'controller' => DirectorController::class,
+        'acl' => ["admin"] 
+    ],
+    'user-directors-list'
+);
+
+$router->map(
+    'GET',
+    '/user/director-add',
+    [
+        'method' => 'addDirector',
+        'controller' => DirectorController::class,
+        'acl' => ["admin"]
+    ],
+    'director-add'
+);
+
+$router->map(
+    'POST',
+    '/user/director-add',
+    [
+        'method' => 'addDirectorPost',
+        'controller' => DirectorController::class,
+        'acl' => ["admin"]
+    ],
+    'director-add-post'
+);
+
+$router->map(
+    'GET',
+    '/director/delete/[i:id]',
+    [
+        'method' => 'deleteDirector',
+        'controller' => DirectorController::class,
+        'acl' => ["admin"]
+    ],
+    'director-delete'
+);
+
+/* --- Genres --- */
+
+$router->map(
+    'GET',
+    '/user/genres-list',
+    [
+        'method' => 'genresList',
+        'controller' => GenreController::class,
+        'acl' => ["admin"] 
+    ],
+    'user-genres-list'
+);
+
+$router->map(
+    'GET',
+    '/user/genre-add',
+    [
+        'method' => 'addGenre',
+        'controller' => GenreController::class,
+        'acl' => ["admin"]
+    ],
+    'genre-add'
+);
+
+$router->map(
+    'POST',
+    '/user/genre-add',
+    [
+        'method' => 'addGenrePost',
+        'controller' => GenreController::class,
+        'acl' => ["admin"]
+    ],
+    'genre-add-post'
+);
+
+$router->map(
+    'GET',
+    '/genre/delete/[i:id]',
+    [
+        'method' => 'deleteGenre',
+        'controller' => GenreController::class,
+        'acl' => ["admin"]
+    ],
+    'genre-delete'
+);
+
+
+/* --- USER --- */
 
 $router->map(
     'GET|POST',
@@ -132,38 +313,38 @@ $router->map(
     [
         'method' => 'logout',
         'controller' => UserController::class ,
-        // 'acl' => ["admin"]
+        'acl' => ["admin"]
     ],
     'logout'
 );
 
 $router->map(
     'GET',
-    '/user/list',
+    '/user/users-list',
     [
-        'method' => 'list',
+        'method' => 'usersList',
         'controller' => UserController::class,
-        // 'acl' => ["admin"] 
+        'acl' => ["admin"] 
     ],
-    'user-list'
+    'users-list'
 );
 
 $router->map(
     'GET',
-    '/user/add',
+    '/user/user-add',
     [
-        'method' => 'add',
+        'method' => 'addUser',
         'controller' => UserController::class,
-        // 'acl' => ["admin"]
+        'acl' => ["admin"]
     ],
     'user-add'
 );
 
 $router->map(
     'POST',
-    '/user/add',
+    '/user/user-add',
     [
-        'method' => 'addPost',
+        'method' => 'addUserPost',
         'controller' => UserController::class,
         'acl' => ["admin"]
     ],
@@ -171,10 +352,10 @@ $router->map(
 );
 
 $router->map(
-    'POST',
+    'GET',
     '/user/delete/[i:id]',
     [
-        'method' => 'delete',
+        'method' => 'deleteUser',
         'controller' => UserController::class,
         'acl' => ["admin"]
     ],
@@ -182,181 +363,6 @@ $router->map(
 );
 
 
-$router->map(
-    'GET',
-    '/user/movies-list',
-    [
-        'method' => 'moviesList',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"] 
-    ],
-    'user-movies-list'
-);
-
-$router->map(
-    'GET',
-    '/user/movie-add',
-    [
-        'method' => 'addMovie',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"]
-    ],
-    'movie-add'
-);
-
-$router->map(
-    'POST',
-    '/user/movie-add',
-    [
-        'method' => 'addMoviePost',
-        'controller' => UserController::class,
-        'acl' => ["admin"]
-    ],
-    'movie-add-post'
-);
-
-$router->map(
-    'GET',
-    '/movie/delete/[i:id]',
-    [
-        'method' => 'delete',
-        'controller' => MovieController::class,
-        'acl' => ["admin"]
-    ],
-    'movie-delete'
-);
-
-$router->map(
-    'GET',
-    '/user/actors-list',
-    [
-        'method' => 'actorsList',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"] 
-    ],
-    'user-actors-list'
-);
-
-$router->map(
-    'GET',
-    '/user/actor-add',
-    [
-        'method' => 'addActor',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"]
-    ],
-    'actor-add'
-);
-
-$router->map(
-    'POST',
-    '/user/movie-add',
-    [
-        'method' => 'addActorPost',
-        'controller' => UserController::class,
-        'acl' => ["admin"]
-    ],
-    'add-post'
-);
-
-$router->map(
-    'GET',
-    '/actor/delete/[i:id]',
-    [
-        'method' => 'delete',
-        'controller' => ActorController::class,
-        'acl' => ["admin"]
-    ],
-    'actor-delete'
-);
-
-$router->map(
-    'GET',
-    '/user/directors-list',
-    [
-        'method' => 'directorsList',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"] 
-    ],
-    'user-directors-list'
-);
-
-$router->map(
-    'GET',
-    '/user/director-add',
-    [
-        'method' => 'addDirector',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"]
-    ],
-    'director-add'
-);
-
-$router->map(
-    'POST',
-    '/user/director-add',
-    [
-        'method' => 'addDirectorPost',
-        'controller' => UserController::class,
-        'acl' => ["admin"]
-    ],
-    'director-add-post'
-);
-
-$router->map(
-    'GET',
-    '/director/delete/[i:id]',
-    [
-        'method' => 'delete',
-        'controller' => DirectorController::class,
-        'acl' => ["admin"]
-    ],
-    'director-delete'
-);
-
-$router->map(
-    'GET',
-    '/user/genres-list',
-    [
-        'method' => 'genresList',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"] 
-    ],
-    'user-genres-list'
-);
-
-$router->map(
-    'GET',
-    '/user/genre-add',
-    [
-        'method' => 'addGenre',
-        'controller' => UserController::class,
-        // 'acl' => ["admin"]
-    ],
-    'genre-add'
-);
-
-$router->map(
-    'POST',
-    '/user/genre-add',
-    [
-        'method' => 'addGenrePost',
-        'controller' => UserController::class,
-        'acl' => ["admin"]
-    ],
-    'genre-add-post'
-);
-
-$router->map(
-    'GET',
-    '/genre/delete/[i:id]',
-    [
-        'method' => 'delete',
-        'controller' => GenreController::class,
-        'acl' => ["admin"]
-    ],
-    'genre-delete'
-);
 
 /* -------------
 --- DISPATCH ---
