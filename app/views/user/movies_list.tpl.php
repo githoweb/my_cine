@@ -9,8 +9,8 @@
         <figure>
             <img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/<?= $movie->getPoster() ?>" alt="" />
             <p><?= $movie->getTitle() ?></p>
-            #<?= $movie->getId() ?>
-            <a href="<?= $router->generate('movie-delete', ['id' => $movie->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>">supprimer</a>
+            <span>#<?= $movie->getId() ?></span>
+            <a href="<?= $router->generate('movie-delete', ['id' => $movie->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>"class="btn btn-danger">supprimer</a>
         </figure>
 
         <?php endforeach ?>

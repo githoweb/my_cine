@@ -102,7 +102,7 @@ $router->map(
     [
         'method' => 'moviesList',
         'controller' => MovieController::class,
-        'acl' => ["admin"] 
+        'acl' => ["admin", "member"] 
     ],
     'user-movies-list'
 );
@@ -113,7 +113,7 @@ $router->map(
     [
         'method' => 'addMovie',
         'controller' => MovieController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'movie-add'
 );
@@ -124,7 +124,7 @@ $router->map(
     [
         'method' => 'addMoviePost',
         'controller' => MovieController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'movie-add-post'
 );
@@ -149,7 +149,7 @@ $router->map(
     [
         'method' => 'actorsList',
         'controller' => ActorController::class,
-        'acl' => ["admin"] 
+        'acl' => ["admin", "member"] 
     ],
     'user-actors-list'
 );
@@ -161,7 +161,7 @@ $router->map(
     [
         'method' => 'addActor',
         'controller' => ActorController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'actor-add'
 );
@@ -172,7 +172,7 @@ $router->map(
     [
         'method' => 'addActorPost',
         'controller' => ActorController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'add-actor-post'
 );
@@ -198,7 +198,7 @@ $router->map(
     [
         'method' => 'list',
         'controller' => DirectorController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'directors-list'
 );
@@ -209,7 +209,7 @@ $router->map(
     [
         'method' => 'directorsList',
         'controller' => DirectorController::class,
-        'acl' => ["admin"] 
+        'acl' => ["admin", "member"] 
     ],
     'user-directors-list'
 );
@@ -220,7 +220,7 @@ $router->map(
     [
         'method' => 'addDirector',
         'controller' => DirectorController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'director-add'
 );
@@ -231,7 +231,7 @@ $router->map(
     [
         'method' => 'addDirectorPost',
         'controller' => DirectorController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'director-add-post'
 );
@@ -255,7 +255,7 @@ $router->map(
     [
         'method' => 'genresList',
         'controller' => GenreController::class,
-        'acl' => ["admin"] 
+        'acl' => ["admin", "member"] 
     ],
     'user-genres-list'
 );
@@ -266,7 +266,7 @@ $router->map(
     [
         'method' => 'addGenre',
         'controller' => GenreController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'genre-add'
 );
@@ -277,7 +277,7 @@ $router->map(
     [
         'method' => 'addGenrePost',
         'controller' => GenreController::class,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'genre-add-post'
 );
@@ -302,7 +302,6 @@ $router->map(
     [
         'method' => 'loginPost',
         'controller' => UserController::class,
-        // 'acl' => ["admin"]
     ],
     'login'
 );
@@ -313,7 +312,7 @@ $router->map(
     [
         'method' => 'logout',
         'controller' => UserController::class ,
-        'acl' => ["admin"]
+        'acl' => ["admin", "member"]
     ],
     'logout'
 );

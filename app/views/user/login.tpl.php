@@ -26,7 +26,7 @@
         </div>
 
         <div class="action">
-            <button type="submit" class="btn btn-primary mt-5">Se connecter</button>
+            <button type="submit" class="btn btn-success">Se connecter</button>
         </div>
 
     </form>

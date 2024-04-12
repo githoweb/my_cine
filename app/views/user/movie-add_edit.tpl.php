@@ -1,5 +1,5 @@
-<div>
-    <a href="<?= $router->generate('user-movies-list') ?>" class="btn btn-success">Retour</a>
+<div class="form_action">
+    <a href="<?= $router->generate('user-movies-list') ?>" class="btn btn-primary">Retour</a>
 
     <h2><?= $title ?></h2>
 
@@ -36,11 +36,10 @@
         </div>
         <div class="formItem">
             <label for="synopsis">Synopsis</label>
-            <textarea value="<?= $movie->getDirectorId() ?>" placeholder="Synopsis" name="synopsis">
-            </textarea>
+            <textarea value="<?= $movie->getDirectorId() ?>" placeholder="Synopsis" name="synopsis"></textarea>
         </div>
         <div class="action">
-            <button type="submit" class="btn btn-primary mt-5">Valider</button>
+            <button type="submit" class="btn btn-success">Valider</button>
         </div>
 
     </form>

@@ -6,8 +6,8 @@
         <?php foreach ($genres as $genre) : ?>
 
             <li>
-                #<?= $genre->getId() ?> :
-                <?= $genre->getName() ?> => <a href="<?= $router->generate('genre-delete', ['id' => $genre->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>">supprimer</a>
+                <span>#<?= $genre->getId() ?></span>
+                <?= $genre->getName() ?> => <a href="<?= $router->generate('genre-delete', ['id' => $genre->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>"class="btn btn-danger">supprimer</a>
             </li>
 
         <?php endforeach ?>

@@ -6,15 +6,17 @@ $baseUrl = $router->generate('movies-list');
 $url = $baseUrl . '?' . $queryString;
 ?>
 
-<a href="<?= $url ?>" title="">Retour à la liste des films</a>
+<a href="<?= $url ?>" class="btn btn-primary" title="">Retour à la liste des films</a>
 
-<div class="card">
+<div class="card card-alt">
 
   <div class="card-poster">
-    <img src="<?= $movie->getPoster() ?>" alt="" />
+    <img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/<?= $movie->getPoster() ?>" alt="" />
   </div>
   <div class="card-data">
-    <h2 class="card-title"><?= $movie->getTitle() ?> (<?= $movie->getDate() ?>)</h2>
+    <div class="card-item">
+      <p>Date de sortie : <?= $movie->getDate() ?></p>
+    </div>
     <div class="card-item">
       <p><?= $movie->getSynopsis() ?></p>
     </div>

@@ -1,4 +1,4 @@
-<div>
+<div class="msg">
 
     <h2>Bonjour <?= $user->getFirstName() ?> <?= $user->getLastName() ?></h2>
 

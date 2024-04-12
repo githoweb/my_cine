@@ -1,5 +1,5 @@
-<div>
-    <a href="<?= $router->generate('users-list') ?>" class="btn btn-success">Retour</a>
+<div class="form_action">
+    <a href="<?= $router->generate('users-list') ?>" class="btn btn-primary">Retour</a>
 
     <h2><?= $title ?></h2>
 
@@ -42,7 +42,7 @@
         </div>
 
         <div class="action">
-            <button type="submit" class="btn btn-primary mt-5">Valider</button>
+            <button type="submit" class="btn btn-success">Valider</button>
         </div>
 
     </form>

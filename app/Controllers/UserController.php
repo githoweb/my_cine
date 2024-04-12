@@ -75,7 +75,7 @@ class UserController extends CoreController
 
                 // dump($_SESSION['userObject']);
 
-                $this->show('user/login-logout-success', [
+                $this->show('user/login_out_success_msg', [
                     'user' => $user,
                     'success' => $tabSuccess
                 ]);
@@ -98,7 +98,7 @@ class UserController extends CoreController
         $tabSuccess = [];
         $tabSuccess[] = "Vous êtes bien déconnecté";
 
-        $this->show('user/login-logout-success', [
+        $this->show('user/login_out_success_msg', [
             'user' => $user,
             'success' => $tabSuccess
         ]);

@@ -22,7 +22,7 @@
                 <td><?= $user->getEmail() ?></td>
                 <td><span class="badge bg-danger"><?= $user->getRole() ?></span></td>
                 <td>
-                    <a href="<?= $router->generate('user-delete', ['id' => $user->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>">supprimer</a>
+                    <a href="<?= $router->generate('user-delete', ['id' => $user->getId()]) ?>?tokenCsrf=<?= $tokenCsrf ?>"class="btn btn-danger">supprimer</a>
                 </td>
             </tr>
 

@@ -2,7 +2,7 @@
 
 <form method="get" action="<?= $router->generate('movies-list') ?>">
 
-  <p>Filtrer par :</p>
+  <p class="filter_by">Filtrer par :</p>
 
   <fieldset>
     <select name="genre_id">
@@ -53,7 +53,6 @@
 
   // $movie->getDirectorId() renvoie une string : il faut la convertir en integer
   $idToFind = intval($movie->getDirectorId());
-  dump($idToFind);
 
   $filteredDirectors = array_filter($directors, function ($object) use ($idToFind) {
     return $object->getId() === $idToFind;

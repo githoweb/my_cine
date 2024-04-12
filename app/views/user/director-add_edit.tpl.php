@@ -1,5 +1,5 @@
-<div>
-    <a href="<?= $router->generate('user-directors-list') ?>" class="btn btn-success">Retour</a>
+<div class="form_action">
+    <a href="<?= $router->generate('user-directors-list') ?>" class="btn btn-primary">Retour</a>
 
     <h2><?= $title ?></h2>
 
@@ -34,11 +34,11 @@
 
         <div class="formItem">
             <label for="biography">Biographie</label>
-            <input type="text" id="biography" placeholder="Biographie" name="biography" value="<?= $director->getBiography() ?>">
+            <textarea id="biography" placeholder="Biographie" name="biography" value="<?= $director->getBiography() ?>"></textarea>
         </div>
 
         <div class="action">
-            <button type="submit" class="btn btn-primary mt-5">Valider</button>
+            <button type="submit" class="btn btn-success">Valider</button>
         </div>
 
     </form>
