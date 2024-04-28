@@ -16,7 +16,6 @@ class CoreController
             // On teste si l'utilisateur a les droits
             $this->checkAuthorization($match['target']['acl']);
         }
-
     }
 
     /**
